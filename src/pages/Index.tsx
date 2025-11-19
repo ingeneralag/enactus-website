@@ -85,15 +85,15 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 px-4 overflow-hidden">
+      <section className="relative pt-20 pb-16 md:pt-24 md:pb-20 px-4 overflow-hidden min-h-[80vh] flex items-center">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-secondary/20 to-accent/20 -z-10" />
         <div className="container mx-auto text-center animate-fade-up">
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent leading-tight">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent leading-tight">
             اشترك واكسب فرص تدريب
             <br />
             ودعم لـ 300,000 جنيه
           </h1>
-          <p className="text-xl md:text-2xl text-muted-foreground mb-10 max-w-3xl mx-auto">
+          <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
             انضم لمسابقة V7 واحصل على فرصة تدريب في IN General
             <br />
             أو قدم على برنامج دعم المشاريع بـ 300,000 جنيه
@@ -101,7 +101,7 @@ const Index = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Button 
               size="lg" 
-              className="text-lg px-8 py-6 bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-opacity"
+              className="text-base md:text-lg px-6 py-4 md:px-8 md:py-6 bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-opacity"
               onClick={() => {
                 const element = document.getElementById('project-support');
                 if (element) {
@@ -114,7 +114,7 @@ const Index = () => {
             <Button 
               size="lg" 
               variant="outline" 
-              className="text-lg px-8 py-6 border-2"
+              className="text-base md:text-lg px-6 py-4 md:px-8 md:py-6 border-2"
               onClick={() => {
                 const element = document.getElementById('v7-competition');
                 if (element) {
