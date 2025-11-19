@@ -158,64 +158,6 @@ export default function AllGroups() {
               </AnimatePresence>
             </div>
 
-            {/* All Registrations Section */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8, duration: 0.6 }}
-              className="mt-16"
-            >
-              <div className="text-center mb-8">
-                <h2 className="text-4xl font-bold bg-gradient-to-r from-teal-600 to-green-600 bg-clip-text text-transparent mb-2">
-                  جميع المشاركين
-                </h2>
-                <p className="text-gray-600 text-lg">
-                  {registrations.length} طالب مسجل في التحدي
-                </p>
-              </div>
-
-              {/* Limit displayed participants */}
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {registrations.map((reg: any, idx: number) => (
-                  <motion.div
-                    key={reg.id}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: idx * 0.02, duration: 0.3 }}
-                    className="card p-4 hover:shadow-lg transition-shadow"
-                  >
-                    <div className="flex items-center gap-3">
-                      {/* Avatar */}
-                      <div className={`w-10 h-10 rounded-full bg-gradient-to-r ${getColorForIndex(idx)} flex items-center justify-center text-white font-bold flex-shrink-0 text-sm`}>
-                        {getInitials(reg.name)}
-                      </div>
-
-                      {/* Info */}
-                      <div className="flex-1 min-w-0">
-                        <p className="font-medium text-foreground truncate">{reg.name}</p>
-                        {reg.college && (
-                          <p className="text-xs text-muted-foreground truncate">
-                            {reg.college}
-                          </p>
-                        )}
-                        <span className={`text-xs px-2 py-0.5 rounded mt-1 inline-block font-semibold ${
-                          reg.interest === 'software' ? 'bg-blue-100 text-blue-700' :
-                          reg.interest === 'marketing' ? 'bg-purple-100 text-purple-700' :
-                          'bg-gray-100 text-gray-700'
-                        }`}>
-                          {
-                            reg.interest === 'software' ? 'تطوير' :
-                            reg.interest === 'marketing' ? 'تسويق' :
-                            'أخرى'
-                          }
-                        </span>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-              
-            </motion.div>
           </>
         ) : (
           <div className="text-center py-12">

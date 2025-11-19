@@ -43,8 +43,8 @@ const Index = () => {
   };
 
   const hasGroups = groups.length > 0;
-  const displayedParticipants = registrations.slice(0, 23);
-  const remainingCount = Math.max(0, registrations.length - 23);
+  const displayedParticipants = registrations.slice(0, 19);
+  const remainingCount = Math.max(0, registrations.length - 19);
   
   // For group members, show only first 3 members and indicate how many more
   const getDisplayedMembers = (members: any[]) => {
@@ -56,7 +56,7 @@ const Index = () => {
   };
   
   // Limit displayed participants in "All Participants" section
-  const maxDisplayedParticipants = 20;
+  const maxDisplayedParticipants = 19;
   const allParticipantsToShow = registrations.slice(0, maxDisplayedParticipants);
   const remainingParticipantsCount = Math.max(0, registrations.length - maxDisplayedParticipants);
 
@@ -99,16 +99,31 @@ const Index = () => {
             أو قدم على برنامج دعم المشاريع بـ 300,000 جنيه
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Link to="/project-support/register">
-              <Button size="lg" className="text-lg px-8 py-6 bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-opacity">
-                قدم على دعم المشاريع
-              </Button>
-            </Link>
-            <Link to="/join">
-              <Button size="lg" variant="outline" className="text-lg px-8 py-6 border-2">
-                شارك في مسابقة التدريب
-              </Button>
-            </Link>
+            <Button 
+              size="lg" 
+              className="text-lg px-8 py-6 bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-opacity"
+              onClick={() => {
+                const element = document.getElementById('project-support');
+                if (element) {
+                  element.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
+            >
+              قدم على دعم المشاريع
+            </Button>
+            <Button 
+              size="lg" 
+              variant="outline" 
+              className="text-lg px-8 py-6 border-2"
+              onClick={() => {
+                const element = document.getElementById('v7-competition');
+                if (element) {
+                  element.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
+            >
+              شارك في مسابقة التدريب
+            </Button>
           </div>
         </div>
         
@@ -118,10 +133,14 @@ const Index = () => {
       </section>
 
       {/* V7 Competition Section */}
-      <section id="v7-competition" className="py-20 px-4 bg-muted/30">
-        <div className="container mx-auto">
+      <section id="v7-competition" className="py-20 px-4 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(#6366f1_1px,transparent_2px)] [background-size:16px_16px] opacity-20 dark:opacity-10 -z-10" />
+        <div className="container mx-auto relative z-10">
           <div className="text-center mb-12 animate-fade-up">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-500/10 mb-4">
+              <Trophy className="w-8 h-8 text-blue-600" />
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
               اكسب فرصة Internship في IN General
             </h2>
             <p className="text-xl text-muted-foreground">مسابقة V7 للطلاب والخريجين</p>
@@ -129,12 +148,12 @@ const Index = () => {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
             {[
-              { icon: Users, title: "التسجيل والتقسيم", desc: "سجل وانضم لمجموعة من 5 أفراد عشوائياً", color: "text-primary" },
-              { icon: Trophy, title: "المشاركة", desc: "شارك مع مجموعتك في التحدي المطلوب", color: "text-secondary" },
-              { icon: Lightbulb, title: "المطلوب", desc: "أرسل الحل عبر WhatsApp خلال 48 ساعة", color: "text-accent" },
-              { icon: Star, title: "الجائزة", desc: "فرصة تدريب في IN General", color: "text-success" },
+              { icon: Users, title: "التسجيل والتقسيم", desc: "سجل وانضم لمجموعة من 5 أفراد عشوائياً", color: "text-blue-600", bg: "bg-blue-50 dark:bg-blue-950/30" },
+              { icon: Trophy, title: "المشاركة", desc: "شارك مع مجموعتك في التحدي المطلوب", color: "text-indigo-600", bg: "bg-indigo-50 dark:bg-indigo-950/30" },
+              { icon: Lightbulb, title: "المطلوب", desc: "أرسل الحل عبر WhatsApp خلال 48 ساعة", color: "text-purple-600", bg: "bg-purple-50 dark:bg-purple-950/30" },
+              { icon: Star, title: "الجائزة", desc: "فرصة تدريب في IN General", color: "text-amber-600", bg: "bg-amber-50 dark:bg-amber-950/30" },
             ].map((step, i) => (
-              <Card key={i} className="p-6 hover:shadow-lg transition-shadow animate-fade-up" style={{ animationDelay: `${i * 0.1}s` }}>
+              <Card key={i} className={`p-6 hover:shadow-lg transition-shadow animate-fade-up ${step.bg}`} style={{ animationDelay: `${i * 0.1}s` }}>
                 <step.icon className={`w-12 h-12 mb-4 ${step.color}`} />
                 <h3 className="text-xl font-bold mb-2">{step.title}</h3>
                 <p className="text-muted-foreground">{step.desc}</p>
@@ -144,7 +163,7 @@ const Index = () => {
 
           <div className="text-center">
             <Link to="/join">
-              <Button size="lg" className="text-lg px-10 py-6 bg-gradient-to-r from-primary to-secondary hover:opacity-90">
+              <Button size="lg" className="text-lg px-10 py-6 bg-gradient-to-r from-blue-600 to-indigo-600 hover:opacity-90 text-white">
                 شارك في المسابقة
                 <ArrowLeft className="mr-2 h-5 w-5" />
               </Button>
@@ -154,67 +173,71 @@ const Index = () => {
       </section>
 
       {/* Project Support Section */}
-      <section id="project-support" className="py-20 px-4">
-        <div className="container mx-auto">
+      <section id="project-support" className="py-20 px-4 bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950/30 dark:to-orange-950/30 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(#f59e0b_1px,transparent_2px)] [background-size:20px_20px] opacity-20 dark:opacity-10 -z-10" />
+        <div className="container mx-auto relative z-10">
           <div className="text-center mb-12 animate-fade-up">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-amber-500/10 mb-4">
+              <DollarSign className="w-8 h-8 text-amber-600" />
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
               برنامج دعم المشاريع
             </h2>
-            <p className="text-3xl font-bold text-accent mb-4">300,000 جنيه</p>
+            <p className="text-3xl font-bold text-amber-600 mb-4">300,000 جنيه</p>
             <p className="text-xl text-muted-foreground">دعم شامل لمشروعك من الفكرة للتنفيذ</p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8 mb-12 max-w-4xl mx-auto">
-            <Card className="p-8 hover:shadow-xl transition-shadow">
-              <DollarSign className="w-12 h-12 text-secondary mb-4" />
+            <Card className="p-8 hover:shadow-xl transition-shadow bg-background/80">
+              <DollarSign className="w-12 h-12 text-amber-600 mb-4" />
               <h3 className="text-2xl font-bold mb-4">الدعم المالي</h3>
               <ul className="space-y-3 text-muted-foreground">
                 <li className="flex items-start gap-2">
-                  <CheckCircle className="w-5 h-5 text-success mt-0.5 flex-shrink-0" />
+                  <CheckCircle className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
                   <span>خدمات ميديا احترافية</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <CheckCircle className="w-5 h-5 text-success mt-0.5 flex-shrink-0" />
+                  <CheckCircle className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
                   <span>تطوير برمجي متكامل</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <CheckCircle className="w-5 h-5 text-success mt-0.5 flex-shrink-0" />
+                  <CheckCircle className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
                   <span>خطة نمو وتوسع</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <CheckCircle className="w-5 h-5 text-success mt-0.5 flex-shrink-0" />
+                  <CheckCircle className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
                   <span>استشارات أسبوعية</span>
                 </li>
               </ul>
             </Card>
 
-            <Card className="p-8 hover:shadow-xl transition-shadow">
-              <GraduationCap className="w-12 h-12 text-primary mb-4" />
+            <Card className="p-8 hover:shadow-xl transition-shadow bg-background/80">
+              <GraduationCap className="w-12 h-12 text-orange-600 mb-4" />
               <h3 className="text-2xl font-bold mb-4">برنامج الإرشاد</h3>
               <ul className="space-y-3 text-muted-foreground">
                 <li className="flex items-start gap-2">
-                  <CheckCircle className="w-5 h-5 text-success mt-0.5 flex-shrink-0" />
+                  <CheckCircle className="w-5 h-5 text-orange-600 mt-0.5 flex-shrink-0" />
                   <span>ساعتين أسبوعياً</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <CheckCircle className="w-5 h-5 text-success mt-0.5 flex-shrink-0" />
+                  <CheckCircle className="w-5 h-5 text-orange-600 mt-0.5 flex-shrink-0" />
                   <span>جلسات فردية 1-to-1</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <CheckCircle className="w-5 h-5 text-success mt-0.5 flex-shrink-0" />
+                  <CheckCircle className="w-5 h-5 text-orange-600 mt-0.5 flex-shrink-0" />
                   <span>خبراء ومتخصصين</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <CheckCircle className="w-5 h-5 text-success mt-0.5 flex-shrink-0" />
-                  <span>متابعة مستمرة</span>
+                  <CheckCircle className="w-5 h-5 text-orange-600 mt-0.5 flex-shrink-0" />
+                  <span>مواكبة مستمرة</span>
                 </li>
               </ul>
             </Card>
           </div>
 
           <div className="grid md:grid-cols-2 gap-6 mb-12 max-w-4xl mx-auto">
-            <Card className="p-6 bg-success/5 border-success/20">
-              <CheckCircle className="w-10 h-10 text-success mb-3" />
+            <Card className="p-6 bg-green-50/50 dark:bg-green-950/30 border border-green-200/50 dark:border-green-800/50">
+              <CheckCircle className="w-10 h-10 text-green-600 dark:text-green-400 mb-3" />
               <h3 className="text-xl font-bold mb-3">الفئات المؤهلة</h3>
               <ul className="text-muted-foreground space-y-2">
                 <li>• الطلاب الجامعيين</li>
@@ -224,8 +247,8 @@ const Index = () => {
               </ul>
             </Card>
 
-            <Card className="p-6 bg-secondary/5 border-secondary/20">
-              <Clipboard className="w-10 h-10 text-secondary mb-3" />
+            <Card className="p-6 bg-orange-50/50 dark:bg-orange-950/30 border border-orange-200/50 dark:border-orange-800/50">
+              <Clipboard className="w-10 h-10 text-orange-600 dark:text-orange-400 mb-3" />
               <h3 className="text-xl font-bold mb-3">الشروط والالتزامات</h3>
               <ul className="text-muted-foreground space-y-2">
                 <li>• وجود فكرة مشروع واضحة</li>
@@ -238,13 +261,13 @@ const Index = () => {
 
           <div className="text-center flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/project-support/register">
-              <Button size="lg" className="text-lg px-10 py-6 bg-gradient-to-r from-primary to-secondary hover:opacity-90">
+              <Button size="lg" className="text-lg px-10 py-6 bg-gradient-to-r from-amber-600 to-orange-600 hover:opacity-90 text-white">
                 قدم كمجموعة
                 <ArrowLeft className="mr-2 h-5 w-5" />
               </Button>
             </Link>
             <Link to="/project-support/register">
-              <Button size="lg" variant="outline" className="text-lg px-10 py-6 border-2">
+              <Button size="lg" variant="outline" className="text-lg px-10 py-6 border-2 border-amber-600 text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-950/30">
                 قدم كفرد
                 <ArrowLeft className="mr-2 h-5 w-5" />
               </Button>
@@ -263,7 +286,7 @@ const Index = () => {
                 <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
                   المسجلين حتى الآن
                 </h2>
-                <p className="text-xl text-muted-foreground mb-4">{count} مشارك</p>
+                <p className="text-xl text-muted-foreground mb-4">{count} طالب</p>
                 <div className="flex items-center justify-center gap-2 text-warning">
                   <Clock className="h-5 w-5 animate-pulse" />
                   <p className="text-lg">في انتظار التقسيم للمجموعات...</p>
@@ -297,13 +320,17 @@ const Index = () => {
                         </span>
                       </Card>
                     ))}
+                    {/* Add the remaining count card in the 20th position */}
+                    {remainingCount > 0 && (
+                      <Card className="p-4 hover:shadow-lg transition-shadow animate-fade-up flex items-center justify-center bg-gradient-to-br from-primary/10 to-secondary/10 border border-primary/20" style={{ animationDelay: `${displayedParticipants.length * 0.02}s` }}>
+                        <div className="text-center">
+                          <p className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">+{remainingCount}</p>
+                          <p className="text-sm text-muted-foreground mt-1 font-medium">طالب</p>
+                        </div>
+                      </Card>
+                    )}
                   </div>
                   
-                  {remainingCount > 0 && (
-                    <div className="text-center">
-                      <p className="text-muted-foreground mb-4">و {remainingCount} مشارك آخر</p>
-                    </div>
-                  )}
                 </>
               )}
             </>
@@ -384,8 +411,8 @@ const Index = () => {
               {/* All Participants */}
               <div className="mt-16">
                 <div className="text-center mb-8">
-                  <h3 className="text-3xl font-bold mb-2">جميع المشاركين</h3>
-                  <p className="text-muted-foreground">{count} مشارك</p>
+                  <h3 className="text-3xl font-bold mb-2">جميع الطلاب</h3>
+                  <p className="text-muted-foreground">{count} طالب</p>
                 </div>
                 
                 <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -418,17 +445,16 @@ const Index = () => {
                       )}
                     </Card>
                   ))}
+                  {/* Add the remaining count card in the 20th position */}
+                  {remainingParticipantsCount > 0 && (
+                    <Card className="p-4 hover:shadow-lg transition-shadow animate-fade-up flex items-center justify-center bg-gradient-to-br from-primary/10 to-secondary/10 border border-primary/20" style={{ animationDelay: `${maxDisplayedParticipants * 0.01}s` }}>
+                      <div className="text-center">
+                        <p className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">+{remainingParticipantsCount}</p>
+                        <p className="text-sm text-muted-foreground mt-1 font-medium">طالب</p>
+                      </div>
+                    </Card>
+                  )}
                 </div>
-                
-                {remainingParticipantsCount > 0 && (
-                  <div className="text-center mt-6">
-                    <Link to="/all-groups">
-                      <Button variant="outline" className="text-muted-foreground">
-                        +{remainingParticipantsCount} مشارك آخر
-                      </Button>
-                    </Link>
-                  </div>
-                )}
               </div>
             </>
           )}
@@ -554,7 +580,7 @@ const Index = () => {
                 transition={{ delay: 2, duration: 0.6 }}
                 className="text-base md:text-lg opacity-80 mb-8 max-w-2xl mx-auto leading-relaxed"
               >
-                بالإبداع والتكنولوجيا، نجعل أفكارك واقعًا. انضم إلينا وشارك في تحويل مشروعك إلى تجربة رقمية استثنائية! 🚀
+                بإبداع والتكنولوجيا، نجعل أفكارك واقعًا. انضم إلينا وشارك في تحويل مشروعك إلى تجربة رقمية استثنائية! 🚀
               </motion.p>
 
               {/* CTA Button with Glow Effect */}
