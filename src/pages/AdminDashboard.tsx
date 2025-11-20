@@ -388,6 +388,36 @@ export default function AdminDashboard() {
           </Card>
         </motion.div>
 
+        {/* Project Applications Card */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="mb-8"
+        >
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <FileText className="w-5 h-5" />
+                طلبات دعم المشاريع
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-600 mb-4">
+                عرض وإدارة طلبات دعم المشاريع المقدمة من المستخدمين
+              </p>
+              <Button
+                onClick={() => navigate('/admin/project-applications')}
+                className="flex items-center gap-2 bg-gradient-to-r from-amber-600 to-orange-600 hover:opacity-90 text-white"
+              >
+                <FileText size={16} />
+                <span>عرض طلبات المشاريع</span>
+                <ArrowRight size={16} />
+              </Button>
+            </CardContent>
+          </Card>
+        </motion.div>
+
         {/* Students Table */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}

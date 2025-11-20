@@ -56,7 +56,7 @@ const Index = () => {
   };
   
   // Limit displayed participants in "All Participants" section
-  const maxDisplayedParticipants = 19;
+  const maxDisplayedParticipants = 8;
   const allParticipantsToShow = registrations.slice(0, maxDisplayedParticipants);
   const remainingParticipantsCount = Math.max(0, registrations.length - maxDisplayedParticipants);
 
@@ -82,26 +82,184 @@ const Index = () => {
     return colors[index % colors.length];
   };
 
+  // Animation variants for scroll animations
+  const cardVariants = {
+    hidden: { 
+      opacity: 0, 
+      y: 30,
+      scale: 0.95
+    },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      scale: 1,
+      transition: {
+        duration: 0.5,
+        ease: [0.25, 0.46, 0.45, 0.94], // Custom easing for smooth animation
+      }
+    }
+  };
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.1,
+      }
+    }
+  };
+
+  // Viewport settings optimized for mobile
+  const viewportSettings = {
+    once: true,
+    amount: 0.15, // Trigger when 15% of element is visible (better for mobile)
+    margin: "0px 0px -50px 0px" // Trigger slightly before element enters viewport
+  };
+
+  // Optimized card variants for better mobile performance
+  const cardVariantsMobile = {
+    hidden: { 
+      opacity: 0, 
+      y: 20, // Reduced from 30 for smoother mobile animation
+      scale: 0.98 // Reduced from 0.95 for less dramatic effect
+    },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      scale: 1,
+      transition: {
+        duration: 0.4, // Faster for mobile
+        ease: [0.25, 0.46, 0.45, 0.94],
+      }
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
-      {/* Hero Section */}
-      <section className="relative pt-20 pb-16 md:pt-24 md:pb-20 px-4 overflow-hidden min-h-[80vh] flex items-center">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-secondary/20 to-accent/20 -z-10" />
-        <div className="container mx-auto text-center animate-fade-up">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent leading-tight">
+      {/* Hero Section - Enhanced Modern Design */}
+      <section className="relative pt-16 pb-20 md:pt-20 md:pb-24 px-4 overflow-x-hidden overflow-y-visible min-h-[90vh] md:min-h-[95vh] flex items-center">
+        {/* Animated Gradient Background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/30 via-secondary/25 to-accent/30 animate-gradient -z-10" />
+        
+        {/* Glass Morphism Overlay */}
+        <div className="absolute inset-0 bg-background/40 backdrop-blur-[2px] -z-10" />
+        
+        {/* Animated Grid Pattern */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] opacity-40 -z-10" />
+        
+        {/* Floating Animated Shapes */}
+        <motion.div
+          animate={{
+            y: [0, -30, 0],
+            x: [0, 20, 0],
+            scale: [1, 1.2, 1],
+            opacity: [0.3, 0.6, 0.3],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          className="absolute top-10 right-4 md:top-20 md:right-10 w-24 h-24 md:w-32 md:h-32 bg-gradient-to-br from-primary to-secondary rounded-full blur-2xl animate-pulse-glow"
+        />
+        <motion.div
+          animate={{
+            y: [0, 30, 0],
+            x: [0, -20, 0],
+            scale: [1, 1.3, 1],
+            opacity: [0.2, 0.5, 0.2],
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 1,
+          }}
+          className="absolute bottom-10 left-4 md:bottom-20 md:left-10 w-32 h-32 md:w-40 md:h-40 bg-gradient-to-br from-accent to-secondary rounded-full blur-3xl animate-pulse-glow"
+        />
+        <motion.div
+          animate={{
+            y: [0, -20, 0],
+            rotate: [0, 180, 360],
+            opacity: [0.2, 0.4, 0.2],
+          }}
+          transition={{
+            duration: 12,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 2,
+          }}
+          className="absolute top-1/2 left-1/4 w-20 h-20 md:w-28 md:h-28 bg-gradient-to-br from-secondary to-primary rounded-full blur-xl"
+        />
+        
+        <div className="container mx-auto text-center relative z-10 py-8 md:py-12">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="mb-6"
+          >
+            {/* Badge */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 backdrop-blur-sm mb-6"
+            >
+              <Sparkles className="w-4 h-4 text-primary" />
+              <span className="text-sm font-semibold text-primary">فرصة ذهبية للطلاب والخريجين</span>
+            </motion.div>
+          </motion.div>
+
+          {/* Main Heading with Enhanced Gradient */}
+          <motion.h1
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.8, ease: "easeOut" }}
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-6 leading-[1.2] md:leading-[1.3]"
+          >
+            <span className="block bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent bg-[length:200%_200%] animate-gradient py-1">
             اشترك واكسب فرص تدريب
-            <br />
+            </span>
+            <span className="block mt-3 md:mt-4 bg-gradient-to-r from-accent via-primary to-secondary bg-clip-text text-transparent bg-[length:200%_200%] animate-gradient py-1">
             ودعم لـ 300,000 جنيه
-          </h1>
-          <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
+            </span>
+          </motion.h1>
+
+          {/* Subtitle */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.8 }}
+            className="text-base sm:text-lg md:text-xl lg:text-2xl text-muted-foreground mb-4 max-w-3xl mx-auto font-medium leading-relaxed px-2"
+          >
             انضم لمسابقة V7 واحصل على فرصة تدريب في IN General
-            <br />
+          </motion.p>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6, duration: 0.8 }}
+            className="text-base sm:text-lg md:text-xl text-muted-foreground mb-8 md:mb-10 max-w-3xl mx-auto px-2"
+          >
             أو قدم على برنامج دعم المشاريع بـ 300,000 جنيه
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          </motion.p>
+
+          {/* CTA Buttons with Enhanced Design */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.7, duration: 0.8 }}
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-6 md:mb-8"
+          >
+            <motion.div
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.98 }}
+            >
             <Button 
               size="lg" 
-              className="text-base md:text-lg px-6 py-4 md:px-8 md:py-6 bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-opacity"
+                className="text-base sm:text-lg md:text-xl px-8 py-6 md:px-10 md:py-7 bg-gradient-to-r from-primary via-secondary to-primary bg-[length:200%_200%] animate-gradient text-white font-bold shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 transition-all duration-300 w-full sm:w-auto"
               onClick={() => {
                 const element = document.getElementById('project-support');
                 if (element) {
@@ -109,12 +267,18 @@ const Index = () => {
                 }
               }}
             >
+                <DollarSign className="ml-2 h-5 w-5" />
               قدم على دعم المشاريع
             </Button>
+            </motion.div>
+            <motion.div
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.98 }}
+            >
             <Button 
               size="lg" 
               variant="outline" 
-              className="text-base md:text-lg px-6 py-4 md:px-8 md:py-6 border-2"
+                className="text-base sm:text-lg md:text-xl px-8 py-6 md:px-10 md:py-7 border-2 border-primary/50 bg-background/80 backdrop-blur-sm hover:bg-primary/10 hover:border-primary transition-all duration-300 font-bold w-full sm:w-auto shadow-md hover:shadow-lg"
               onClick={() => {
                 const element = document.getElementById('v7-competition');
                 if (element) {
@@ -122,195 +286,615 @@ const Index = () => {
                 }
               }}
             >
+                <Trophy className="ml-2 h-5 w-5" />
               شارك في مسابقة التدريب
             </Button>
+            </motion.div>
+          </motion.div>
+
+          {/* Stats or Additional Info */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.9, duration: 0.8 }}
+            className="flex flex-wrap justify-center items-center gap-6 md:gap-8 mt-6 md:mt-8"
+          >
+            <div className="flex items-center gap-2 text-sm md:text-base">
+              <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+              <span className="text-muted-foreground font-medium">تسجيل مفتوح</span>
           </div>
+            <div className="flex items-center gap-2 text-sm md:text-base">
+              <Users className="w-4 h-4 text-primary" />
+              <span className="text-muted-foreground font-medium">{count}+ طالب مسجل</span>
         </div>
+            <div className="flex items-center gap-2 text-sm md:text-base">
+              <Star className="w-4 h-4 text-amber-500" />
+              <span className="text-muted-foreground font-medium">فرص حصرية</span>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* V7 Competition Section - Enhanced Modern Design */}
+      <section id="v7-competition" className="py-16 md:py-24 px-4 relative overflow-hidden bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-blue-950/40 dark:via-indigo-950/40 dark:to-purple-950/40">
+        {/* Animated Background Layers */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-indigo-500/10 to-purple-500/10 animate-gradient -z-10" />
+        <div className="absolute inset-0 bg-background/30 backdrop-blur-[1px] -z-10" />
         
-        {/* Floating shapes */}
-        <div className="absolute top-20 right-10 w-20 h-20 bg-primary/20 rounded-full blur-xl animate-float" />
-        <div className="absolute bottom-20 left-10 w-32 h-32 bg-secondary/20 rounded-full blur-xl animate-float" style={{ animationDelay: "1s" }} />
-      </section>
-
-      {/* V7 Competition Section */}
-      <section id="v7-competition" className="py-20 px-4 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(#6366f1_1px,transparent_2px)] [background-size:16px_16px] opacity-20 dark:opacity-10 -z-10" />
+        {/* Animated Grid Pattern */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#3b82f620_1px,transparent_1px),linear-gradient(to_bottom,#3b82f620_1px,transparent_1px)] bg-[size:32px_32px] opacity-30 dark:opacity-20 -z-10" />
+        
+        {/* Floating Decorative Elements */}
+        <motion.div
+          animate={{
+            y: [0, -25, 0],
+            x: [0, 15, 0],
+            opacity: [0.2, 0.4, 0.2],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          className="absolute top-20 right-10 w-40 h-40 bg-gradient-to-br from-blue-400 to-indigo-400 rounded-full blur-3xl opacity-20"
+        />
+        <motion.div
+          animate={{
+            y: [0, 25, 0],
+            x: [0, -15, 0],
+            opacity: [0.15, 0.35, 0.15],
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 1,
+          }}
+          className="absolute bottom-20 left-10 w-48 h-48 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-full blur-3xl opacity-20"
+        />
+        
         <div className="container mx-auto relative z-10">
-          <div className="text-center mb-12 animate-fade-up">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-500/10 mb-4">
-              <Trophy className="w-8 h-8 text-blue-600" />
-            </div>
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-              اكسب فرصة Internship في IN General
-            </h2>
-            <p className="text-xl text-muted-foreground">مسابقة V7 للطلاب والخريجين</p>
-          </div>
+          {/* Header Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-12 md:mb-16"
+          >
+            {/* Icon Badge */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8, rotate: -180 }}
+              whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2, duration: 0.6, type: "spring" }}
+              className="inline-flex items-center justify-center w-20 h-20 md:w-24 md:h-24 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 mb-6 shadow-lg shadow-blue-500/30"
+            >
+              <Trophy className="w-10 h-10 md:w-12 md:h-12 text-white" />
+            </motion.div>
+            
+            {/* Title */}
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3, duration: 0.8 }}
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black mb-4 leading-tight"
+            >
+              <span className="block bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent bg-[length:200%_200%] animate-gradient">
+                اكسب فرصة Internship
+              </span>
+              <span className="block mt-2 bg-gradient-to-r from-indigo-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent bg-[length:200%_200%] animate-gradient">
+                في IN General
+              </span>
+            </motion.h2>
+            
+            {/* Subtitle */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.4, duration: 0.8 }}
+              className="text-lg md:text-xl lg:text-2xl text-muted-foreground font-medium"
+            >
+              مسابقة V7 للطلاب والخريجين
+            </motion.p>
+          </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+          {/* Steps Cards Grid */}
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportSettings}
+            className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-12 md:mb-16"
+          >
             {[
-              { icon: Users, title: "التسجيل والتقسيم", desc: "سجل وانضم لمجموعة من 5 أفراد عشوائياً", color: "text-blue-600", bg: "bg-blue-50 dark:bg-blue-950/30" },
-              { icon: Trophy, title: "المشاركة", desc: "شارك مع مجموعتك في التحدي المطلوب", color: "text-indigo-600", bg: "bg-indigo-50 dark:bg-indigo-950/30" },
-              { icon: Lightbulb, title: "المطلوب", desc: "أرسل الحل عبر WhatsApp خلال 48 ساعة", color: "text-purple-600", bg: "bg-purple-50 dark:bg-purple-950/30" },
-              { icon: Star, title: "الجائزة", desc: "فرصة تدريب في IN General", color: "text-amber-600", bg: "bg-amber-50 dark:bg-amber-950/30" },
+              { 
+                icon: Users, 
+                title: "التسجيل والتقسيم", 
+                desc: "سجل وانضم لمجموعة من 5 أفراد عشوائياً", 
+                color: "text-blue-600 dark:text-blue-400", 
+                bg: "from-blue-50 to-blue-100 dark:from-blue-950/50 dark:to-blue-900/30",
+                border: "border-blue-200 dark:border-blue-800",
+                iconBg: "bg-blue-100 dark:bg-blue-900/50",
+                number: "01"
+              },
+              { 
+                icon: Trophy, 
+                title: "المشاركة", 
+                desc: "شارك مع مجموعتك في التحدي المطلوب", 
+                color: "text-indigo-600 dark:text-indigo-400", 
+                bg: "from-indigo-50 to-indigo-100 dark:from-indigo-950/50 dark:to-indigo-900/30",
+                border: "border-indigo-200 dark:border-indigo-800",
+                iconBg: "bg-indigo-100 dark:bg-indigo-900/50",
+                number: "02"
+              },
+              { 
+                icon: Lightbulb, 
+                title: "المطلوب", 
+                desc: "أرسل الحل عبر WhatsApp خلال 48 ساعة", 
+                color: "text-purple-600 dark:text-purple-400", 
+                bg: "from-purple-50 to-purple-100 dark:from-purple-950/50 dark:to-purple-900/30",
+                border: "border-purple-200 dark:border-purple-800",
+                iconBg: "bg-purple-100 dark:bg-purple-900/50",
+                number: "03"
+              },
+              { 
+                icon: Star, 
+                title: "الجائزة", 
+                desc: "فرصة تدريب في IN General", 
+                color: "text-amber-600 dark:text-amber-400", 
+                bg: "from-amber-50 to-amber-100 dark:from-amber-950/50 dark:to-amber-900/30",
+                border: "border-amber-200 dark:border-amber-800",
+                iconBg: "bg-amber-100 dark:bg-amber-900/50",
+                number: "04"
+              },
             ].map((step, i) => (
-              <Card key={i} className={`p-6 hover:shadow-lg transition-shadow animate-fade-up ${step.bg}`} style={{ animationDelay: `${i * 0.1}s` }}>
-                <step.icon className={`w-12 h-12 mb-4 ${step.color}`} />
-                <h3 className="text-xl font-bold mb-2">{step.title}</h3>
-                <p className="text-muted-foreground">{step.desc}</p>
+              <motion.div
+                key={i}
+                variants={cardVariants}
+                whileHover={{ y: -8, scale: 1.02 }}
+                className="relative"
+              >
+                <Card className={`p-6 md:p-8 bg-gradient-to-br ${step.bg} border-2 ${step.border} hover:shadow-2xl transition-all duration-300 backdrop-blur-sm relative overflow-hidden group`}>
+                  {/* Number Badge */}
+                  <div className="absolute top-4 left-4 text-6xl font-black text-black/5 dark:text-white/5">
+                    {step.number}
+                  </div>
+                  
+                  {/* Icon */}
+                  <motion.div
+                    whileHover={{ scale: 1.1, rotate: 5 }}
+                    className={`inline-flex items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-xl ${step.iconBg} mb-4 relative z-10`}
+                  >
+                    <step.icon className={`w-7 h-7 md:w-8 md:h-8 ${step.color}`} />
+                  </motion.div>
+                  
+                  {/* Content */}
+                  <div className="relative z-10">
+                    <h3 className="text-xl md:text-2xl font-bold mb-3 text-foreground">{step.title}</h3>
+                    <p className="text-muted-foreground text-sm md:text-base leading-relaxed">{step.desc}</p>
+                  </div>
+                  
+                  {/* Hover Effect Line */}
+                  <div className={`absolute bottom-0 right-0 left-0 h-1 bg-gradient-to-r ${step.bg} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300`} />
               </Card>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
 
-          <div className="text-center">
+          {/* CTA Button */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.5, duration: 0.8 }}
+            className="text-center"
+          >
+            <motion.div
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.98 }}
+            >
             <Link to="/join">
-              <Button size="lg" className="text-lg px-10 py-6 bg-gradient-to-r from-blue-600 to-indigo-600 hover:opacity-90 text-white">
+                <Button 
+                  size="lg" 
+                  className="text-base sm:text-lg md:text-xl px-8 py-6 md:px-12 md:py-7 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-[length:200%_200%] animate-gradient hover:opacity-90 text-white font-bold shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300"
+                >
+                  <Trophy className="ml-2 h-5 w-5 md:h-6 md:w-6" />
                 شارك في المسابقة
-                <ArrowLeft className="mr-2 h-5 w-5" />
+                  <ArrowLeft className="mr-2 h-5 w-5 md:h-6 md:w-6" />
               </Button>
             </Link>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 
-      {/* Project Support Section */}
-      <section id="project-support" className="py-20 px-4 bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950/30 dark:to-orange-950/30 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(#f59e0b_1px,transparent_2px)] [background-size:20px_20px] opacity-20 dark:opacity-10 -z-10" />
+      {/* Project Support Section - Enhanced Modern Design */}
+      <section id="project-support" className="py-16 md:py-24 px-4 relative overflow-hidden bg-gradient-to-br from-amber-50 via-orange-50 to-red-50 dark:from-amber-950/40 dark:via-orange-950/40 dark:to-red-950/40">
+        {/* Animated Background Layers */}
+        <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 via-orange-500/10 to-red-500/10 animate-gradient -z-10" />
+        <div className="absolute inset-0 bg-background/30 backdrop-blur-[1px] -z-10" />
+        
+        {/* Animated Grid Pattern */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#f59e0b20_1px,transparent_1px),linear-gradient(to_bottom,#f59e0b20_1px,transparent_1px)] bg-[size:32px_32px] opacity-30 dark:opacity-20 -z-10" />
+        
+        {/* Floating Decorative Elements */}
+        <motion.div
+          animate={{
+            y: [0, -30, 0],
+            x: [0, 20, 0],
+            opacity: [0.2, 0.4, 0.2],
+            scale: [1, 1.2, 1],
+          }}
+          transition={{
+            duration: 9,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          className="absolute top-20 right-10 w-44 h-44 bg-gradient-to-br from-amber-400 to-orange-400 rounded-full blur-3xl opacity-20"
+        />
+        <motion.div
+          animate={{
+            y: [0, 30, 0],
+            x: [0, -20, 0],
+            opacity: [0.15, 0.35, 0.15],
+            scale: [1, 1.3, 1],
+          }}
+          transition={{
+            duration: 11,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 1.5,
+          }}
+          className="absolute bottom-20 left-10 w-52 h-52 bg-gradient-to-br from-orange-400 to-red-400 rounded-full blur-3xl opacity-20"
+        />
+        
         <div className="container mx-auto relative z-10">
-          <div className="text-center mb-12 animate-fade-up">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-amber-500/10 mb-4">
-              <DollarSign className="w-8 h-8 text-amber-600" />
-            </div>
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
+          {/* Header Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-12 md:mb-16"
+          >
+            {/* Icon Badge */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8, rotate: -180 }}
+              whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2, duration: 0.6, type: "spring" }}
+              className="inline-flex items-center justify-center w-20 h-20 md:w-24 md:h-24 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 mb-6 shadow-lg shadow-amber-500/30"
+            >
+              <DollarSign className="w-10 h-10 md:w-12 md:h-12 text-white" />
+            </motion.div>
+            
+            {/* Title */}
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3, duration: 0.8 }}
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black mb-4 leading-tight"
+            >
+              <span className="block bg-gradient-to-r from-amber-600 via-orange-600 to-red-600 bg-clip-text text-transparent bg-[length:200%_200%] animate-gradient">
               برنامج دعم المشاريع
-            </h2>
-            <p className="text-3xl font-bold text-amber-600 mb-4">300,000 جنيه</p>
-            <p className="text-xl text-muted-foreground">دعم شامل لمشروعك من الفكرة للتنفيذ</p>
-          </div>
+              </span>
+            </motion.h2>
+            
+            {/* Amount Highlight */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.4, duration: 0.6, type: "spring" }}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-amber-100 to-orange-100 dark:from-amber-900/50 dark:to-orange-900/50 border-2 border-amber-300 dark:border-amber-700 mb-4"
+            >
+              <DollarSign className="w-6 h-6 text-amber-600 dark:text-amber-400" />
+              <span className="text-2xl md:text-3xl lg:text-4xl font-black bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
+                300,000 جنيه
+              </span>
+            </motion.div>
+            
+            {/* Subtitle */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.5, duration: 0.8 }}
+              className="text-lg md:text-xl lg:text-2xl text-muted-foreground font-medium"
+            >
+              دعم شامل لمشروعك من الفكرة للتنفيذ
+            </motion.p>
+          </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-8 mb-12 max-w-4xl mx-auto">
-            <Card className="p-8 hover:shadow-xl transition-shadow bg-background/80">
-              <DollarSign className="w-12 h-12 text-amber-600 mb-4" />
-              <h3 className="text-2xl font-bold mb-4">الدعم المالي</h3>
-              <ul className="space-y-3 text-muted-foreground">
-                <li className="flex items-start gap-2">
-                  <CheckCircle className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
-                  <span>خدمات ميديا احترافية</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
-                  <span>تطوير برمجي متكامل</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
-                  <span>خطة نمو وتوسع</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
-                  <span>استشارات أسبوعية</span>
-                </li>
+          {/* Main Features Cards */}
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportSettings}
+            className="grid md:grid-cols-2 gap-6 md:gap-8 mb-12 md:mb-16 max-w-5xl mx-auto"
+          >
+            <motion.div
+              variants={cardVariants}
+              whileHover={{ y: -8, scale: 1.02 }}
+            >
+              <Card className="p-6 md:p-8 hover:shadow-2xl transition-all duration-300 bg-gradient-to-br from-amber-50/80 to-orange-50/80 dark:from-amber-950/50 dark:to-orange-950/50 border-2 border-amber-200 dark:border-amber-800 backdrop-blur-sm relative overflow-hidden group">
+                {/* Decorative Background */}
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-amber-200/20 to-transparent rounded-full blur-2xl" />
+                
+                <motion.div
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  className="inline-flex items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-xl bg-amber-100 dark:bg-amber-900/50 mb-6 relative z-10"
+                >
+                  <DollarSign className="w-8 h-8 md:w-10 md:h-10 text-amber-600 dark:text-amber-400" />
+                </motion.div>
+                
+                <h3 className="text-2xl md:text-3xl font-black mb-6 text-foreground relative z-10">الدعم المالي</h3>
+                <ul className="space-y-4 text-muted-foreground relative z-10">
+                  {[
+                    "خدمات ميديا احترافية",
+                    "تطوير برمجي متكامل",
+                    "خطة نمو وتوسع",
+                    "استشارات أسبوعية"
+                  ].map((item, idx) => (
+                    <motion.li
+                      key={idx}
+                      initial={{ opacity: 0, x: -10 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.3 + idx * 0.1 }}
+                      className="flex items-start gap-3 group/item"
+                    >
+                      <CheckCircle className="w-6 h-6 text-amber-600 dark:text-amber-400 mt-0.5 flex-shrink-0 group-hover/item:scale-110 transition-transform" />
+                      <span className="text-base md:text-lg font-medium">{item}</span>
+                    </motion.li>
+                  ))}
+              </ul>
+                
+                {/* Hover Effect Line */}
+                <div className="absolute bottom-0 right-0 left-0 h-1 bg-gradient-to-r from-amber-400 to-orange-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
+            </Card>
+            </motion.div>
+
+            <motion.div
+              variants={cardVariants}
+              whileHover={{ y: -8, scale: 1.02 }}
+            >
+              <Card className="p-6 md:p-8 hover:shadow-2xl transition-all duration-300 bg-gradient-to-br from-orange-50/80 to-red-50/80 dark:from-orange-950/50 dark:to-red-950/50 border-2 border-orange-200 dark:border-orange-800 backdrop-blur-sm relative overflow-hidden group">
+                {/* Decorative Background */}
+                <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-orange-200/20 to-transparent rounded-full blur-2xl" />
+                
+                <motion.div
+                  whileHover={{ scale: 1.1, rotate: -5 }}
+                  className="inline-flex items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-xl bg-orange-100 dark:bg-orange-900/50 mb-6 relative z-10"
+                >
+                  <GraduationCap className="w-8 h-8 md:w-10 md:h-10 text-orange-600 dark:text-orange-400" />
+                </motion.div>
+                
+                <h3 className="text-2xl md:text-3xl font-black mb-6 text-foreground relative z-10">برنامج الإرشاد</h3>
+                <ul className="space-y-4 text-muted-foreground relative z-10">
+                  {[
+                    "ساعتين أسبوعياً",
+                    "جلسات فردية 1-to-1",
+                    "خبراء ومتخصصين",
+                    "مواكبة مستمرة"
+                  ].map((item, idx) => (
+                    <motion.li
+                      key={idx}
+                      initial={{ opacity: 0, x: 10 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.4 + idx * 0.1 }}
+                      className="flex items-start gap-3 group/item"
+                    >
+                      <CheckCircle className="w-6 h-6 text-orange-600 dark:text-orange-400 mt-0.5 flex-shrink-0 group-hover/item:scale-110 transition-transform" />
+                      <span className="text-base md:text-lg font-medium">{item}</span>
+                    </motion.li>
+                  ))}
+              </ul>
+                
+                {/* Hover Effect Line */}
+                <div className="absolute bottom-0 right-0 left-0 h-1 bg-gradient-to-r from-orange-400 to-red-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
+            </Card>
+            </motion.div>
+          </motion.div>
+
+          {/* Info Cards */}
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportSettings}
+            className="grid md:grid-cols-2 gap-4 md:gap-6 mb-12 md:mb-16 max-w-4xl mx-auto"
+          >
+            <motion.div
+              variants={cardVariants}
+              whileHover={{ y: -5, scale: 1.02 }}
+            >
+              <Card className="p-6 md:p-8 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950/50 dark:to-emerald-950/50 border-2 border-green-200 dark:border-green-800 hover:shadow-xl transition-all duration-300 relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-24 h-24 bg-green-200/20 rounded-full blur-2xl" />
+                <motion.div
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  className="inline-flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-xl bg-green-100 dark:bg-green-900/50 mb-4 relative z-10"
+                >
+                  <CheckCircle className="w-6 h-6 md:w-7 md:h-7 text-green-600 dark:text-green-400" />
+                </motion.div>
+                <h3 className="text-xl md:text-2xl font-black mb-4 text-foreground relative z-10">الفئات المؤهلة</h3>
+                <ul className="text-muted-foreground space-y-2.5 relative z-10">
+                  {[
+                    "الطلاب الجامعيين",
+                    "خريجي الجامعات حديثاً",
+                    "أصحاب المشاريع الناشئة",
+                    "فرق العمل الطموحة"
+                  ].map((item, idx) => (
+                    <li key={idx} className="flex items-center gap-2 text-sm md:text-base">
+                      <div className="w-1.5 h-1.5 rounded-full bg-green-500" />
+                      <span className="font-medium">{item}</span>
+                    </li>
+                  ))}
               </ul>
             </Card>
+            </motion.div>
 
-            <Card className="p-8 hover:shadow-xl transition-shadow bg-background/80">
-              <GraduationCap className="w-12 h-12 text-orange-600 mb-4" />
-              <h3 className="text-2xl font-bold mb-4">برنامج الإرشاد</h3>
-              <ul className="space-y-3 text-muted-foreground">
-                <li className="flex items-start gap-2">
-                  <CheckCircle className="w-5 h-5 text-orange-600 mt-0.5 flex-shrink-0" />
-                  <span>ساعتين أسبوعياً</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle className="w-5 h-5 text-orange-600 mt-0.5 flex-shrink-0" />
-                  <span>جلسات فردية 1-to-1</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle className="w-5 h-5 text-orange-600 mt-0.5 flex-shrink-0" />
-                  <span>خبراء ومتخصصين</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle className="w-5 h-5 text-orange-600 mt-0.5 flex-shrink-0" />
-                  <span>مواكبة مستمرة</span>
-                </li>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.5, duration: 0.6 }}
+              whileHover={{ y: -5, scale: 1.02 }}
+            >
+              <Card className="p-6 md:p-8 bg-gradient-to-br from-orange-50 to-amber-50 dark:from-orange-950/50 dark:to-amber-950/50 border-2 border-orange-200 dark:border-orange-800 hover:shadow-xl transition-all duration-300 relative overflow-hidden group">
+                <div className="absolute top-0 left-0 w-24 h-24 bg-orange-200/20 rounded-full blur-2xl" />
+                <motion.div
+                  whileHover={{ scale: 1.1, rotate: -5 }}
+                  className="inline-flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-xl bg-orange-100 dark:bg-orange-900/50 mb-4 relative z-10"
+                >
+                  <Clipboard className="w-6 h-6 md:w-7 md:h-7 text-orange-600 dark:text-orange-400" />
+                </motion.div>
+                <h3 className="text-xl md:text-2xl font-black mb-4 text-foreground relative z-10">الشروط والالتزامات</h3>
+                <ul className="text-muted-foreground space-y-2.5 relative z-10">
+                  {[
+                    "وجود فكرة مشروع واضحة",
+                    "الالتزام بخطة التنفيذ",
+                    "الحضور المنتظم للجلسات",
+                    "تقديم تقارير دورية"
+                  ].map((item, idx) => (
+                    <li key={idx} className="flex items-center gap-2 text-sm md:text-base">
+                      <div className="w-1.5 h-1.5 rounded-full bg-orange-500" />
+                      <span className="font-medium">{item}</span>
+                    </li>
+                  ))}
               </ul>
             </Card>
-          </div>
+            </motion.div>
+          </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-6 mb-12 max-w-4xl mx-auto">
-            <Card className="p-6 bg-green-50/50 dark:bg-green-950/30 border border-green-200/50 dark:border-green-800/50">
-              <CheckCircle className="w-10 h-10 text-green-600 dark:text-green-400 mb-3" />
-              <h3 className="text-xl font-bold mb-3">الفئات المؤهلة</h3>
-              <ul className="text-muted-foreground space-y-2">
-                <li>• الطلاب الجامعيين</li>
-                <li>• خريجي الجامعات حديثاً</li>
-                <li>• أصحاب المشاريع الناشئة</li>
-                <li>• فرق العمل الطموحة</li>
-              </ul>
-            </Card>
-
-            <Card className="p-6 bg-orange-50/50 dark:bg-orange-950/30 border border-orange-200/50 dark:border-orange-800/50">
-              <Clipboard className="w-10 h-10 text-orange-600 dark:text-orange-400 mb-3" />
-              <h3 className="text-xl font-bold mb-3">الشروط والالتزامات</h3>
-              <ul className="text-muted-foreground space-y-2">
-                <li>• وجود فكرة مشروع واضحة</li>
-                <li>• الالتزام بخطة التنفيذ</li>
-                <li>• الحضور المنتظم للجلسات</li>
-                <li>• تقديم تقارير دورية</li>
-              </ul>
-            </Card>
-          </div>
-
-          <div className="text-center flex flex-col sm:flex-row gap-4 justify-center">
+          {/* CTA Button */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.6, duration: 0.8 }}
+            className="text-center"
+          >
+            <motion.div
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.98 }}
+            >
             <Link to="/project-support/register">
-              <Button size="lg" className="text-lg px-10 py-6 bg-gradient-to-r from-amber-600 to-orange-600 hover:opacity-90 text-white">
-                قدم كمجموعة
-                <ArrowLeft className="mr-2 h-5 w-5" />
+                <Button 
+                  size="lg" 
+                  className="text-base sm:text-lg md:text-xl px-8 py-6 md:px-12 md:py-7 bg-gradient-to-r from-amber-600 via-orange-600 to-red-600 bg-[length:200%_200%] animate-gradient hover:opacity-90 text-white font-bold shadow-lg shadow-amber-500/30 hover:shadow-xl hover:shadow-amber-500/40 transition-all duration-300 w-full sm:w-auto"
+                >
+                  <Lightbulb className="ml-2 h-5 w-5 md:h-6 md:w-6" />
+                  قدم وأنشئ مشروعك
+                  <ArrowLeft className="mr-2 h-5 w-5 md:h-6 md:w-6" />
               </Button>
             </Link>
-            <Link to="/project-support/register">
-              <Button size="lg" variant="outline" className="text-lg px-10 py-6 border-2 border-amber-600 text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-950/30">
-                قدم كفرد
-                <ArrowLeft className="mr-2 h-5 w-5" />
-              </Button>
-            </Link>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 
-      {/* Registrations/Groups Section */}
-      <section className="py-20 px-4">
-        <div className="container mx-auto">
+      {/* Registrations/Groups Section - Enhanced Modern Design */}
+      <section className="py-16 md:py-24 px-4 relative overflow-hidden bg-gradient-to-br from-slate-50 via-gray-50 to-slate-50 dark:from-slate-950/50 dark:via-gray-950/50 dark:to-slate-950/50">
+        {/* Animated Background Layers */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5 animate-gradient -z-10" />
+        <div className="absolute inset-0 bg-background/40 backdrop-blur-[1px] -z-10" />
+        
+        {/* Animated Grid Pattern */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808010_1px,transparent_1px),linear-gradient(to_bottom,#80808010_1px,transparent_1px)] bg-[size:24px_24px] opacity-30 dark:opacity-20 -z-10" />
+        
+        <div className="container mx-auto relative z-10">
           {!hasGroups ? (
             <>
               {/* Before Groups Formed */}
-              <div className="text-center mb-12 animate-fade-up">
-                <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+                className="text-center mb-12 md:mb-16"
+              >
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.2, duration: 0.6, type: "spring" }}
+                  className="inline-flex items-center justify-center w-20 h-20 md:w-24 md:h-24 rounded-2xl bg-gradient-to-br from-primary to-secondary mb-6 shadow-lg shadow-primary/30"
+                >
+                  <Users className="w-10 h-10 md:w-12 md:h-12 text-white" />
+                </motion.div>
+                
+                <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black mb-4 leading-tight">
+                  <span className="block bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent bg-[length:200%_200%] animate-gradient">
                   المسجلين حتى الآن
+                  </span>
                 </h2>
-                <p className="text-xl text-muted-foreground mb-4">{count} طالب</p>
-                <div className="flex items-center justify-center gap-2 text-warning">
-                  <Clock className="h-5 w-5 animate-pulse" />
-                  <p className="text-lg">في انتظار التقسيم للمجموعات...</p>
-                </div>
-              </div>
+                
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.3, duration: 0.8 }}
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary/10 border-2 border-primary/20 mb-4"
+                >
+                  <span className="text-2xl md:text-3xl font-black bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                    {count}
+                  </span>
+                  <span className="text-lg md:text-xl text-muted-foreground font-bold">طالب</span>
+                </motion.div>
+                
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.4, duration: 0.8 }}
+                  className="flex items-center justify-center gap-2 text-warning"
+                >
+                  <Clock className="h-5 w-5 md:h-6 md:w-6 animate-pulse" />
+                  <p className="text-base md:text-lg font-medium">في انتظار التقسيم للمجموعات...</p>
+                </motion.div>
+              </motion.div>
 
               {registrations.length > 0 && (
-                <>
-                  <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
+                <motion.div
+                  variants={containerVariants}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={viewportSettings}
+                  className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6"
+                >
                     {displayedParticipants.map((reg, idx) => (
-                      <Card key={reg.id} className="p-4 hover:shadow-lg transition-shadow animate-fade-up" style={{ animationDelay: `${idx * 0.02}s` }}>
-                        <div className="flex items-center gap-3 mb-2">
-                          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-bold">
+                    <motion.div
+                      key={reg.id}
+                      variants={cardVariants}
+                      whileHover={{ y: -5, scale: 1.02 }}
+                    >
+                      <Card className="p-4 md:p-5 hover:shadow-xl transition-all duration-300 bg-background/80 backdrop-blur-sm border-2 border-border/50 hover:border-primary/50 group relative overflow-hidden">
+                        {/* Decorative Background */}
+                        <div className="absolute top-0 right-0 w-20 h-20 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-colors" />
+                        
+                        <div className="flex items-center gap-3 mb-3 relative z-10">
+                          <motion.div
+                            whileHover={{ scale: 1.1, rotate: 5 }}
+                            className="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-black text-lg md:text-xl shadow-lg"
+                          >
                             {reg.name.charAt(0)}
-                          </div>
+                          </motion.div>
                           <div className="flex-1 min-w-0">
-                            <p className="font-medium text-foreground truncate">{reg.name}</p>
-                            <p className="text-xs text-muted-foreground truncate">{reg.college || "غير محدد"}</p>
+                            <p className="font-bold text-foreground truncate text-sm md:text-base">{reg.name}</p>
+                            <p className="text-xs text-muted-foreground truncate mt-0.5">{reg.college || "غير محدد"}</p>
                           </div>
                         </div>
-                        <span className={`text-xs px-2 py-1 mt-2 inline-block rounded-full font-semibold ${
-                          reg.interest === 'software' ? 'bg-blue-100 text-blue-700' :
-                          reg.interest === 'marketing' ? 'bg-purple-100 text-purple-700' :
-                          'bg-gray-100 text-gray-700'
+                        <span className={`text-xs md:text-sm px-3 py-1.5 mt-2 inline-block rounded-full font-bold relative z-10 ${
+                          reg.interest === 'software' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300' :
+                          reg.interest === 'marketing' ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/50 dark:text-purple-300' :
+                          'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300'
                         }`}>
                           {
                             reg.interest === 'software' ? 'تطوير' :
@@ -319,62 +903,120 @@ const Index = () => {
                           }
                         </span>
                       </Card>
+                    </motion.div>
                     ))}
-                    {/* Add the remaining count card in the 20th position */}
+                  
+                  {/* Remaining Count Card */}
                     {remainingCount > 0 && (
-                      <Card className="p-4 hover:shadow-lg transition-shadow animate-fade-up flex items-center justify-center bg-gradient-to-br from-primary/10 to-secondary/10 border border-primary/20" style={{ animationDelay: `${displayedParticipants.length * 0.02}s` }}>
+                    <motion.div
+                      variants={cardVariants}
+                      whileHover={{ scale: 1.05 }}
+                    >
+                      <Card className="p-4 md:p-5 hover:shadow-xl transition-all duration-300 flex items-center justify-center bg-gradient-to-br from-primary/20 to-secondary/20 border-2 border-primary/30 hover:border-primary/50 backdrop-blur-sm">
                         <div className="text-center">
-                          <p className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">+{remainingCount}</p>
-                          <p className="text-sm text-muted-foreground mt-1 font-medium">طالب</p>
+                          <p className="text-3xl md:text-4xl font-black bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">+{remainingCount}</p>
+                          <p className="text-sm md:text-base text-muted-foreground mt-1 font-bold">طالب</p>
                         </div>
                       </Card>
+                    </motion.div>
                     )}
-                  </div>
-                  
-                </>
+                  </motion.div>
               )}
             </>
           ) : (
             <>
               {/* After Groups Formed */}
-              <div className="text-center mb-12 animate-fade-up">
-                <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+                className="text-center mb-12 md:mb-16"
+              >
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.2, duration: 0.6, type: "spring" }}
+                  className="inline-flex items-center justify-center w-20 h-20 md:w-24 md:h-24 rounded-2xl bg-gradient-to-br from-success to-emerald-600 mb-6 shadow-lg shadow-success/30"
+                >
+                  <Users className="w-10 h-10 md:w-12 md:h-12 text-white" />
+                </motion.div>
+                
+                <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black mb-4 leading-tight">
+                  <span className="block bg-gradient-to-r from-success via-emerald-600 to-teal-600 bg-clip-text text-transparent bg-[length:200%_200%] animate-gradient">
                   المجموعات المكونة
+                  </span>
                 </h2>
-                <p className="text-xl text-muted-foreground">{groups.length} مجموعة مشكلة</p>
-              </div>
+                
+                <motion.p
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.3, duration: 0.8 }}
+                  className="text-lg md:text-xl lg:text-2xl text-muted-foreground font-medium"
+                >
+                  {groups.length} مجموعة مشكلة
+                </motion.p>
+              </motion.div>
 
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+              <motion.div
+                variants={containerVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={viewportSettings}
+                className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-12"
+              >
                 {groups.slice(0, 5).map((group: any, idx: number) => (
-                  <Card key={group.id} className="p-6 hover:shadow-lg transition-shadow animate-fade-up" style={{ animationDelay: `${idx * 0.1}s` }}>
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="p-2 bg-success/10 rounded-full">
-                        <Users className="h-6 w-6 text-success" />
-                      </div>
+                  <motion.div
+                    key={group.id}
+                    variants={cardVariants}
+                    whileHover={{ y: -8, scale: 1.02 }}
+                  >
+                    <Card className="p-6 md:p-8 hover:shadow-2xl transition-all duration-300 bg-gradient-to-br from-success/10 to-emerald-50 dark:from-success/20 dark:to-emerald-950/50 border-2 border-success/30 dark:border-success/50 backdrop-blur-sm relative overflow-hidden group">
+                      {/* Decorative Background */}
+                      <div className="absolute top-0 right-0 w-32 h-32 bg-success/10 rounded-full blur-3xl" />
+                      
+                      <div className="flex items-center gap-4 mb-6 relative z-10">
+                        <motion.div
+                          whileHover={{ scale: 1.1, rotate: 5 }}
+                          className="p-3 bg-success/20 dark:bg-success/30 rounded-xl"
+                        >
+                          <Users className="h-6 w-6 md:h-7 md:w-7 text-success" />
+                        </motion.div>
                       <div>
-                        <h3 className="text-xl font-bold">{group.name}</h3>
-                        <p className="text-sm text-muted-foreground">{group.members.length} أعضاء</p>
+                          <h3 className="text-xl md:text-2xl font-black text-foreground">{group.name}</h3>
+                          <p className="text-sm md:text-base text-muted-foreground font-medium">{group.members.length} أعضاء</p>
                       </div>
                     </div>
-                    <div className="space-y-3">
+                      
+                      <div className="space-y-3 relative z-10">
                       {getDisplayedMembers(group.members).map((member: any, mIdx: number) => (
-                        <div key={mIdx} className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
-                          <div className={`w-10 h-10 rounded-full bg-gradient-to-r ${getColorForIndex(mIdx)} flex items-center justify-center text-white font-bold flex-shrink-0 text-sm`}>
+                          <motion.div
+                            key={mIdx}
+                            initial={{ opacity: 0, x: -10 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.1 + mIdx * 0.05 }}
+                            whileHover={{ x: 5 }}
+                            className="flex items-start gap-3 p-3 bg-background/60 dark:bg-background/40 rounded-xl border border-border/50 hover:border-primary/30 transition-colors"
+                          >
+                            <div className={`w-12 h-12 rounded-xl bg-gradient-to-r ${getColorForIndex(mIdx)} flex items-center justify-center text-white font-black text-sm md:text-base shadow-md flex-shrink-0`}>
                             {getInitials(member.name)}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <p className="font-semibold text-foreground truncate">
+                              <p className="font-bold text-foreground truncate text-sm md:text-base">
                               {member.name}
                             </p>
                             {member.college && (
-                              <p className="text-xs text-muted-foreground flex items-center gap-1 truncate">
-                                <span>{member.college}</span>
+                                <p className="text-xs text-muted-foreground truncate mt-1">
+                                  {member.college}
                               </p>
                             )}
-                            <span className={`text-xs px-2 py-0.5 rounded mt-1 inline-block font-semibold ${
-                              member.interest === 'software' ? 'bg-blue-100 text-blue-700' :
-                              member.interest === 'marketing' ? 'bg-purple-100 text-purple-700' :
-                              'bg-gray-100 text-gray-700'
+                              <span className={`text-xs px-2 py-1 rounded-full mt-2 inline-block font-bold ${
+                                member.interest === 'software' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300' :
+                                member.interest === 'marketing' ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/50 dark:text-purple-300' :
+                                'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300'
                             }`}>
                               {
                                 member.interest === 'software' ? 'تطوير' :
@@ -383,54 +1025,133 @@ const Index = () => {
                               }
                             </span>
                           </div>
-                        </div>
+                          </motion.div>
                       ))}
                       {getRemainingMembersCount(group.members) > 0 && (
-                        <div className="text-center py-2">
-                          <span className="text-sm text-muted-foreground font-medium">
+                          <div className="text-center py-3 bg-muted/30 rounded-xl">
+                            <span className="text-sm md:text-base text-muted-foreground font-bold">
                             +{getRemainingMembersCount(group.members)} عضو آخر
                           </span>
                         </div>
                       )}
                     </div>
                   </Card>
+                  </motion.div>
                 ))}
-              </div>
+              </motion.div>
 
               {groups.length > 5 && (
-                <div className="text-center mb-12">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.5, duration: 0.8 }}
+                  className="text-center mb-12"
+                >
+                  <motion.div
+                    whileHover={{ scale: 1.05, y: -2 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
                   <Link to="/all-groups">
-                    <Button size="lg" variant="outline">
+                      <Button 
+                        size="lg" 
+                        variant="outline" 
+                        className="text-base md:text-lg px-8 py-6 md:px-10 md:py-7 border-2 border-success/50 text-success hover:bg-success/10 font-bold shadow-md hover:shadow-lg transition-all duration-300"
+                      >
                       عرض جميع المجموعات ({groups.length})
                       <ArrowLeft className="mr-2 h-5 w-5" />
                     </Button>
                   </Link>
-                </div>
+                  </motion.div>
+                </motion.div>
               )}
 
-              {/* All Participants */}
-              <div className="mt-16">
-                <div className="text-center mb-8">
-                  <h3 className="text-3xl font-bold mb-2">جميع الطلاب</h3>
-                  <p className="text-muted-foreground">{count} طالب</p>
-                </div>
+              {/* All Participants - Enhanced Design */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.6, duration: 0.8 }}
+                className="mt-16 md:mt-20"
+              >
+                {/* Header */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.2, duration: 0.6 }}
+                  className="text-center mb-10 md:mb-12"
+                >
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.3, duration: 0.6, type: 'spring' }}
+                    className="inline-flex items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-gradient-to-br from-primary to-secondary mb-4 shadow-lg shadow-primary/30"
+                  >
+                    <Users className="w-8 h-8 md:w-10 md:h-10 text-white" />
+                  </motion.div>
+                  
+                  <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black mb-4 leading-tight">
+                    <span className="block bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent bg-[length:200%_200%] animate-gradient">
+                      جميع الطلاب
+                    </span>
+                  </h3>
+                  
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.4, duration: 0.6 }}
+                    className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary/10 border-2 border-primary/20"
+                  >
+                    <span className="text-xl md:text-2xl font-black bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                      {count}
+                    </span>
+                    <span className="text-base md:text-lg text-muted-foreground font-bold">طالب</span>
+                  </motion.div>
+                </motion.div>
                 
-                <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {/* Cards Grid */}
+                <motion.div
+                  variants={containerVariants}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={viewportSettings}
+                  className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 max-w-6xl mx-auto"
+                >
                   {allParticipantsToShow.map((reg, idx) => (
-                    <Card key={reg.id} className="p-4 hover:shadow-lg transition-shadow animate-fade-up" style={{ animationDelay: `${idx * 0.01}s` }}>
-                      <div className="flex items-center gap-3 mb-2">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-bold">
+                    <motion.div
+                      key={reg.id}
+                      variants={cardVariants}
+                      whileHover={{ y: -8, scale: 1.03 }}
+                      className="relative"
+                    >
+                      <Card className="p-5 md:p-6 hover:shadow-2xl transition-all duration-300 bg-gradient-to-br from-background to-muted/30 backdrop-blur-sm border-2 border-border/50 hover:border-primary/50 group relative overflow-hidden">
+                        {/* Decorative Background */}
+                        <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/15 transition-colors" />
+                        <div className="absolute bottom-0 left-0 w-16 h-16 bg-secondary/5 rounded-full blur-2xl group-hover:bg-secondary/15 transition-colors" />
+                        
+                        {/* Avatar */}
+                        <div className="flex items-center gap-4 mb-4 relative z-10">
+                          <motion.div
+                            whileHover={{ scale: 1.15, rotate: 10 }}
+                            className="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-gradient-to-br from-primary via-secondary to-accent flex items-center justify-center text-white font-black text-xl md:text-2xl shadow-lg shadow-primary/30 flex-shrink-0"
+                          >
                           {reg.name.charAt(0)}
-                        </div>
+                          </motion.div>
                         <div className="flex-1 min-w-0">
-                          <p className="font-medium text-foreground truncate">{reg.name}</p>
-                          <p className="text-xs text-muted-foreground truncate">{reg.college || "غير محدد"}</p>
+                            <p className="font-black text-foreground truncate text-base md:text-lg mb-1">{reg.name}</p>
+                            <p className="text-xs md:text-sm text-muted-foreground truncate font-medium">{reg.college || "غير محدد"}</p>
                         </div>
                       </div>
-                      <span className={`text-xs px-2 py-1 mt-2 inline-block rounded-full font-semibold ${
-                        reg.interest === 'software' ? 'bg-blue-100 text-blue-700' :
-                        reg.interest === 'marketing' ? 'bg-purple-100 text-purple-700' :
-                        'bg-gray-100 text-gray-700'
+                        
+                        {/* Badges */}
+                        <div className="flex flex-wrap gap-2 relative z-10">
+                          <span className={`text-xs md:text-sm px-3 py-1.5 rounded-full font-bold shadow-sm ${
+                            reg.interest === 'software' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300 border border-blue-200 dark:border-blue-800' :
+                            reg.interest === 'marketing' ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/50 dark:text-purple-300 border border-purple-200 dark:border-purple-800' :
+                            'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 dark:border-gray-700'
                       }`}>
                         {
                           reg.interest === 'software' ? 'تطوير' :
@@ -439,136 +1160,212 @@ const Index = () => {
                         }
                       </span>
                       {reg.group && (
-                        <span className="text-xs px-2 py-1 bg-success/10 text-success rounded-full mt-2 inline-block">
+                            <span className="text-xs md:text-sm px-3 py-1.5 bg-success/20 text-success rounded-full font-bold border border-success/40 shadow-sm">
                           {groups.find((g: any) => g.id === reg.group)?.name}
                         </span>
                       )}
+                        </div>
+                        
+                        {/* Hover Effect Line */}
+                        <div className="absolute bottom-0 right-0 left-0 h-1 bg-gradient-to-r from-primary via-secondary to-accent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
                     </Card>
+                    </motion.div>
                   ))}
-                  {/* Add the remaining count card in the 20th position */}
+                  
+                  {/* Remaining Count Card - Enhanced */}
                   {remainingParticipantsCount > 0 && (
-                    <Card className="p-4 hover:shadow-lg transition-shadow animate-fade-up flex items-center justify-center bg-gradient-to-br from-primary/10 to-secondary/10 border border-primary/20" style={{ animationDelay: `${maxDisplayedParticipants * 0.01}s` }}>
-                      <div className="text-center">
-                        <p className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">+{remainingParticipantsCount}</p>
-                        <p className="text-sm text-muted-foreground mt-1 font-medium">طالب</p>
+                    <motion.div
+                      variants={cardVariants}
+                      whileHover={{ scale: 1.08, y: -5 }}
+                      className="relative"
+                    >
+                      <Card className="p-5 md:p-6 hover:shadow-2xl transition-all duration-300 flex items-center justify-center bg-gradient-to-br from-primary/20 via-secondary/20 to-accent/20 border-2 border-primary/40 hover:border-primary/60 backdrop-blur-sm relative overflow-hidden group">
+                        {/* Animated Background */}
+                        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-secondary/10 to-accent/10 animate-gradient opacity-50" />
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl group-hover:bg-primary/20 transition-colors" />
+                        <div className="absolute bottom-0 left-0 w-24 h-24 bg-secondary/10 rounded-full blur-2xl group-hover:bg-secondary/20 transition-colors" />
+                        
+                        <div className="text-center relative z-10">
+                          <motion.div
+                            animate={{
+                              scale: [1, 1.1, 1],
+                            }}
+                            transition={{
+                              duration: 2,
+                              repeat: Infinity,
+                              ease: 'easeInOut'
+                            }}
+                          >
+                            <p className="text-4xl md:text-5xl lg:text-6xl font-black bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent bg-[length:200%_200%] animate-gradient mb-2">
+                              +{remainingParticipantsCount}
+                            </p>
+                          </motion.div>
+                          <p className="text-base md:text-lg text-muted-foreground font-bold">طالب</p>
+                          <p className="text-xs md:text-sm text-muted-foreground/70 mt-1">إضافي</p>
                       </div>
                     </Card>
+                    </motion.div>
                   )}
-                </div>
-              </div>
+                </motion.div>
+              </motion.div>
             </>
           )}
         </div>
       </section>
 
-      {/* Company Banner */}
-      <section className="py-20 px-4">
+      {/* Company Banner - Enhanced Modern Design */}
+      <section className="py-16 md:py-24 px-4 relative overflow-hidden">
+        {/* Background Gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-50 via-blue-50 to-teal-50 dark:from-purple-950/30 dark:via-blue-950/30 dark:to-teal-950/30 -z-10" />
+        
         <motion.div
           initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1, duration: 0.8 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
           className="w-full"
         >
-          <div className="card relative overflow-hidden bg-gradient-to-br from-purple-600 via-blue-600 to-teal-500 text-white p-8 md:p-12 mx-auto max-w-6xl rounded-2xl">
-            {/* Animated Background Shapes */}
-            <motion.div
-              animate={{
-                scale: [1, 1.2, 1],
-                rotate: [0, 90, 0],
-                opacity: [0.1, 0.2, 0.1],
-                x: [0, 50, 0],
-                y: [0, 30, 0]
-              }}
-              transition={{
-                duration: 10,
-                repeat: Infinity,
-                ease: 'easeInOut'
-              }}
-              className="absolute -top-20 -left-20 w-60 h-60 bg-white rounded-full blur-3xl"
-            />
+          <div className="relative overflow-hidden bg-gradient-to-br from-purple-600 via-blue-600 to-teal-500 text-white p-8 md:p-12 lg:p-16 mx-auto max-w-6xl rounded-3xl md:rounded-[2rem] shadow-2xl shadow-purple-500/30">
+            {/* Enhanced Animated Background Shapes */}
             <motion.div
               animate={{
                 scale: [1, 1.3, 1],
-                rotate: [0, -90, 0],
-                opacity: [0.1, 0.2, 0.1],
-                x: [0, -30, 0],
-                y: [0, 50, 0]
+                rotate: [0, 90, 0],
+                opacity: [0.15, 0.3, 0.15],
+                x: [0, 60, 0],
+                y: [0, 40, 0]
               }}
               transition={{
                 duration: 12,
                 repeat: Infinity,
-                ease: 'easeInOut',
-                delay: 2
+                ease: 'easeInOut'
               }}
-              className="absolute -bottom-20 -right-20 w-80 h-80 bg-purple-300 rounded-full blur-3xl"
+              className="absolute -top-24 -left-24 w-72 h-72 md:w-96 md:h-96 bg-white rounded-full blur-3xl"
             />
             <motion.div
               animate={{
-                scale: [1, 1.15, 1],
-                rotate: [0, 180, 0],
-                opacity: [0.05, 0.15, 0.05]
+                scale: [1, 1.4, 1],
+                rotate: [0, -90, 0],
+                opacity: [0.12, 0.28, 0.12],
+                x: [0, -40, 0],
+                y: [0, 60, 0]
               }}
               transition={{
-                duration: 15,
+                duration: 14,
+                repeat: Infinity,
+                ease: 'easeInOut',
+                delay: 2
+              }}
+              className="absolute -bottom-24 -right-24 w-80 h-80 md:w-[28rem] md:h-[28rem] bg-purple-300 rounded-full blur-3xl"
+            />
+            <motion.div
+              animate={{
+                scale: [1, 1.2, 1],
+                rotate: [0, 180, 0],
+                opacity: [0.08, 0.2, 0.08]
+              }}
+              transition={{
+                duration: 18,
                 repeat: Infinity,
                 ease: 'easeInOut',
                 delay: 4
               }}
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-teal-300 rounded-full blur-3xl"
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[32rem] h-[32rem] bg-teal-300 rounded-full blur-3xl"
             />
+            
+            {/* Grid Pattern Overlay */}
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff10_1px,transparent_1px),linear-gradient(to_bottom,#ffffff10_1px,transparent_1px)] bg-[size:32px_32px] opacity-30" />
 
-            <div className="relative z-10">
+            <div className="relative z-10 text-center">
+              {/* Badge */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2, duration: 0.6, type: 'spring' }}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 mb-6"
+              >
+                <Sparkles className="w-4 h-4 text-yellow-300" />
+                <span className="text-sm font-semibold">الراعي الرسمي</span>
+              </motion.div>
+
               {/* Sparkles Icon */}
               <motion.div
+                initial={{ opacity: 0, scale: 0 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3, duration: 0.6, type: 'spring' }}
                 animate={{
                   rotate: [0, 10, -10, 0],
-                  scale: [1, 1.2, 1],
-                  y: [0, -10, 0]
+                  scale: [1, 1.15, 1],
+                  y: [0, -8, 0]
                 }}
                 transition={{
+                  rotate: {
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: 'easeInOut'
+                  },
+                  scale: {
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: 'easeInOut'
+                  },
+                  y: {
                   duration: 3,
                   repeat: Infinity,
                   ease: 'easeInOut'
+                  }
                 }}
-                className="inline-block mb-4"
+                className="inline-block mb-6"
               >
-                <Sparkles size={48} className="text-yellow-300 drop-shadow-lg" />
+                <Sparkles size={56} className="md:w-16 md:h-16 text-yellow-300 drop-shadow-2xl" />
               </motion.div>
 
-              {/* Title with Wave Animation */}
+              {/* Title */}
               <motion.h3 
                 initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.2, duration: 0.6 }}
-                className="text-3xl md:text-4xl font-black mb-2"
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.4, duration: 0.8 }}
+                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black mb-4 tracking-tight"
               >
                 التحدي برعاية
               </motion.h3>
               
+              {/* Company Name with Enhanced Gradient */}
               <motion.h2 
                 initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 1.4, duration: 0.6, type: 'spring' }}
-                className="text-4xl md:text-6xl font-black mb-4 bg-gradient-to-r from-yellow-200 via-white to-yellow-200 bg-clip-text text-transparent"
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.5, duration: 0.8, type: 'spring' }}
+                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black mb-3 leading-tight"
               >
+                <span className="block bg-gradient-to-r from-yellow-200 via-white to-yellow-200 bg-clip-text text-transparent bg-[length:200%_200%] animate-gradient drop-shadow-2xl">
                 IN General
+                </span>
               </motion.h2>
               
+              {/* Tagline */}
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 1.6, duration: 0.6 }}
-                className="text-2xl md:text-3xl font-bold mb-6"
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.6, duration: 0.8 }}
+                className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-8 tracking-wide"
               >
+                <span className="bg-gradient-to-r from-blue-200 via-cyan-200 to-teal-200 bg-clip-text text-transparent">
                 Digital Solution
+                </span>
               </motion.div>
 
-              {/* Subtitle with Typewriter Effect */}
+              {/* Quote */}
               <motion.p 
                 initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1.8, duration: 0.8 }}
-                className="text-lg md:text-xl opacity-90 mb-6 font-semibold italic"
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.7, duration: 0.8 }}
+                className="text-base sm:text-lg md:text-xl lg:text-2xl opacity-95 mb-6 font-semibold italic max-w-3xl mx-auto"
               >
                 "Your Digital Journey, Our Expertise."
               </motion.p>
@@ -576,76 +1373,80 @@ const Index = () => {
               {/* Description */}
               <motion.p 
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 2, duration: 0.6 }}
-                className="text-base md:text-lg opacity-80 mb-8 max-w-2xl mx-auto leading-relaxed"
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.8, duration: 0.8 }}
+                className="text-sm sm:text-base md:text-lg lg:text-xl opacity-90 mb-10 max-w-2xl mx-auto leading-relaxed px-4"
               >
                 بإبداع والتكنولوجيا، نجعل أفكارك واقعًا. انضم إلينا وشارك في تحويل مشروعك إلى تجربة رقمية استثنائية! 🚀
               </motion.p>
 
-              {/* CTA Button with Glow Effect */}
+              {/* CTA Button with Enhanced Glow Effect */}
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 2.2, duration: 0.5, type: 'spring' }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.9, duration: 0.6, type: 'spring' }}
               >
                 <motion.a
-                  href="https://linktr.ee/ingeneralag"
+                  href="https://in-general.net/links"
                   target="_blank"
                   rel="noopener noreferrer"
                   whileHover={{ 
                     scale: 1.08, 
                     y: -5,
-                    boxShadow: '0 25px 50px -12px rgba(255, 255, 255, 0.5)'
+                    boxShadow: '0 30px 60px -12px rgba(255, 255, 255, 0.6)'
                   }}
                   whileTap={{ scale: 0.95 }}
                   animate={{
                     boxShadow: [
-                      '0 10px 30px rgba(255, 255, 255, 0.2)',
-                      '0 15px 40px rgba(255, 255, 255, 0.4)',
-                      '0 10px 30px rgba(255, 255, 255, 0.2)'
+                      '0 10px 40px rgba(255, 255, 255, 0.3)',
+                      '0 20px 60px rgba(255, 255, 255, 0.5)',
+                      '0 10px 40px rgba(255, 255, 255, 0.3)'
                     ]
                   }}
                   transition={{
                     boxShadow: {
-                      duration: 2,
+                      duration: 3,
                       repeat: Infinity,
                       ease: 'easeInOut'
                     }
                   }}
-                  className="inline-flex items-center gap-3 bg-white text-purple-700 px-10 py-5 rounded-full font-bold text-lg shadow-2xl hover:shadow-purple-500/50 transition-all"
+                  className="inline-flex items-center gap-3 bg-white text-purple-700 px-8 py-4 md:px-12 md:py-6 rounded-full font-bold text-base md:text-lg lg:text-xl shadow-2xl hover:shadow-purple-500/50 transition-all backdrop-blur-sm"
                 >
-                  <Globe size={24} />
+                  <Globe size={20} className="md:w-6 md:h-6" />
                   <span>تواصل معنا عبر السوشيال ميديا</span>
-                  <ExternalLink size={20} />
+                  <ExternalLink size={18} className="md:w-5 md:h-5" />
                 </motion.a>
               </motion.div>
 
               {/* Decorative Line */}
               <motion.div
                 initial={{ scaleX: 0 }}
-                animate={{ scaleX: 1 }}
-                transition={{ delay: 2.4, duration: 0.8 }}
-                className="mt-8 h-1 w-32 mx-auto bg-gradient-to-r from-transparent via-white to-transparent rounded-full"
+                whileInView={{ scaleX: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 1, duration: 1 }}
+                className="mt-10 h-1 w-40 md:w-48 mx-auto bg-gradient-to-r from-transparent via-white/80 to-transparent rounded-full"
               />
 
               {/* Made with Love */}
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 2.6, duration: 0.6 }}
-                className="mt-6"
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 1.1, duration: 0.8 }}
+                className="mt-8"
               >
                 <motion.div
                   animate={{
                     scale: [1, 1.05, 1]
                   }}
                   transition={{
-                    duration: 1.5,
+                    duration: 2,
                     repeat: Infinity,
                     ease: 'easeInOut'
                   }}
-                  className="flex items-center justify-center gap-2 text-sm opacity-80"
+                  className="flex items-center justify-center gap-2 text-sm md:text-base opacity-90"
                 >
                   <span>صُنع بكل</span>
                   <motion.div
@@ -653,12 +1454,12 @@ const Index = () => {
                       scale: [1, 1.3, 1]
                     }}
                     transition={{
-                      duration: 1,
+                      duration: 1.2,
                       repeat: Infinity,
                       ease: 'easeInOut'
                     }}
                   >
-                    <Heart size={16} className="text-red-300 fill-red-300" />
+                    <Heart size={18} className="md:w-5 md:h-5 text-red-300 fill-red-300" />
                   </motion.div>
                   <span>من فريق IN General</span>
                 </motion.div>
