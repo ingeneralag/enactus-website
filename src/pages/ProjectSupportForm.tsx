@@ -322,7 +322,7 @@ export default function ProjectSupportForm() {
                 className="text-3xl sm:text-4xl md:text-5xl font-black mb-3 leading-tight"
               >
                 <span className="block bg-gradient-to-r from-amber-600 via-orange-600 to-red-600 bg-clip-text text-transparent bg-[length:200%_200%] animate-gradient">
-                  التقديم على دعم المشاريع
+              التقديم على دعم المشاريع
                 </span>
               </motion.h1>
               
@@ -332,9 +332,9 @@ export default function ProjectSupportForm() {
                 transition={{ delay: 0.4, duration: 0.6 }}
                 className="text-base md:text-lg text-muted-foreground font-medium"
               >
-                قدم مشروعك للحصول على دعم مالي يصل إلى 300,000 جنيه
+              قدم مشروعك للحصول على دعم مالي يصل إلى 300,000 جنيه
               </motion.p>
-            </CardHeader>
+          </CardHeader>
             
             <CardContent className="relative z-10">
               <form onSubmit={handleSubmit} className="space-y-8 md:space-y-10">
@@ -446,126 +446,126 @@ export default function ProjectSupportForm() {
                 >
                   <div className="flex items-center gap-3 mb-4">
                     <div className="p-2 rounded-lg bg-primary/10">
-                      <Users className="w-5 h-5 text-primary" />
+                  <Users className="w-5 h-5 text-primary" />
                     </div>
                     <h2 className="text-xl md:text-2xl font-bold text-foreground">معلومات الفريق</h2>
-                  </div>
-                  
-                  <div className="space-y-2">
+                </div>
+                
+                <div className="space-y-2">
                     <Label htmlFor="teamName" className="text-base font-semibold">
-                      اسم الفريق <span className="text-destructive">*</span>
-                    </Label>
-                    <Input
-                      id="teamName"
-                      value={formData.teamName}
-                      onChange={(e) => handleInputChange('teamName', e.target.value)}
-                      placeholder="أدخل اسم فريقكم"
+                    اسم الفريق <span className="text-destructive">*</span>
+                  </Label>
+                  <Input
+                    id="teamName"
+                    value={formData.teamName}
+                    onChange={(e) => handleInputChange('teamName', e.target.value)}
+                    placeholder="أدخل اسم فريقكم"
                       required={applicationType === 'group'}
                       className="h-12 border-2 focus:border-primary/50 transition-all duration-300 bg-background/50 backdrop-blur-sm"
-                    />
+                  />
+                </div>
+                
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-lg">أعضاء الفريق</Label>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={addTeamMember}
+                      disabled={teamMembers.length >= 5}
+                    >
+                      <UserPlus size={16} className="mr-2" />
+                      إضافة عضو
+                    </Button>
                   </div>
                   
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <Label className="text-lg">أعضاء الفريق</Label>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={addTeamMember}
-                        disabled={teamMembers.length >= 5}
-                      >
-                        <UserPlus size={16} className="mr-2" />
-                        إضافة عضو
-                      </Button>
-                    </div>
-                    
-                    {teamMembers.map((member, index) => (
+                  {teamMembers.map((member, index) => (
                       <Card key={member.id} className="border-2 border-border/50 bg-background/50 backdrop-blur-sm">
                         <CardContent className="p-5">
-                          <div className="flex items-start gap-4">
-                            <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
-                              <div className="space-y-2">
+                        <div className="flex items-start gap-4">
+                          <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="space-y-2">
                                 <Label htmlFor={`memberName-${index}`} className="text-sm font-semibold">
-                                  الاسم <span className="text-destructive">*</span>
-                                </Label>
-                                <Input
-                                  id={`memberName-${index}`}
-                                  placeholder="الاسم الكامل"
-                                  value={member.name}
-                                  onChange={(e) =>
-                                    updateTeamMember(member.id, "name", e.target.value)
-                                  }
+                                الاسم <span className="text-destructive">*</span>
+                              </Label>
+                              <Input
+                                id={`memberName-${index}`}
+                                placeholder="الاسم الكامل"
+                                value={member.name}
+                                onChange={(e) =>
+                                  updateTeamMember(member.id, "name", e.target.value)
+                                }
                                   required={applicationType === 'group'}
                                   className="h-11 border-2 focus:border-primary/50 transition-all duration-300"
-                                />
-                              </div>
-                              
-                              <div className="space-y-2">
-                                <Label htmlFor={`memberPhone-${index}`} className="text-sm font-semibold">
-                                  رقم الهاتف <span className="text-destructive">*</span>
-                                </Label>
-                                <Input
-                                  id={`memberPhone-${index}`}
-                                  placeholder="01xxxxxxxxx"
-                                  value={member.phone}
-                                  onChange={(e) =>
-                                    updateTeamMember(member.id, "phone", e.target.value)
-                                  }
-                                  required={applicationType === 'group'}
-                                  className="h-11 border-2 focus:border-primary/50 transition-all duration-300"
-                                  dir="ltr"
-                                />
-                              </div>
-                              
-                              <div className="space-y-2">
-                                <Label htmlFor={`memberEmail-${index}`} className="text-sm font-semibold">
-                                  البريد الإلكتروني
-                                </Label>
-                                <Input
-                                  id={`memberEmail-${index}`}
-                                  type="email"
-                                  placeholder="email@example.com"
-                                  value={member.email}
-                                  onChange={(e) =>
-                                    updateTeamMember(member.id, "email", e.target.value)
-                                  }
-                                  className="h-11 border-2 focus:border-primary/50 transition-all duration-300"
-                                  dir="ltr"
-                                />
-                              </div>
-                              
-                              <div className="space-y-2">
-                                <Label htmlFor={`memberRole-${index}`} className="text-sm font-semibold">
-                                  الدور في الفريق
-                                </Label>
-                                <Input
-                                  id={`memberRole-${index}`}
-                                  placeholder="المطور، المدير، إلخ"
-                                  value={member.role}
-                                  onChange={(e) =>
-                                    updateTeamMember(member.id, "role", e.target.value)
-                                  }
-                                  className="h-11 border-2 focus:border-primary/50 transition-all duration-300"
-                                />
-                              </div>
+                              />
                             </div>
                             
-                            {teamMembers.length > 1 && (
-                              <Button
-                                type="button"
-                                variant="ghost"
-                                size="icon"
-                                onClick={() => removeTeamMember(member.id)}
-                                className="rounded-lg hover:bg-destructive/10 hover:text-destructive transition-colors"
-                              >
-                                <X size={18} />
-                              </Button>
-                            )}
+                            <div className="space-y-2">
+                                <Label htmlFor={`memberPhone-${index}`} className="text-sm font-semibold">
+                                رقم الهاتف <span className="text-destructive">*</span>
+                              </Label>
+                              <Input
+                                id={`memberPhone-${index}`}
+                                placeholder="01xxxxxxxxx"
+                                value={member.phone}
+                                onChange={(e) =>
+                                  updateTeamMember(member.id, "phone", e.target.value)
+                                }
+                                  required={applicationType === 'group'}
+                                  className="h-11 border-2 focus:border-primary/50 transition-all duration-300"
+                                  dir="ltr"
+                              />
+                            </div>
+                            
+                            <div className="space-y-2">
+                                <Label htmlFor={`memberEmail-${index}`} className="text-sm font-semibold">
+                                البريد الإلكتروني
+                              </Label>
+                              <Input
+                                id={`memberEmail-${index}`}
+                                type="email"
+                                placeholder="email@example.com"
+                                value={member.email}
+                                onChange={(e) =>
+                                  updateTeamMember(member.id, "email", e.target.value)
+                                }
+                                  className="h-11 border-2 focus:border-primary/50 transition-all duration-300"
+                                  dir="ltr"
+                              />
+                            </div>
+                            
+                            <div className="space-y-2">
+                                <Label htmlFor={`memberRole-${index}`} className="text-sm font-semibold">
+                                الدور في الفريق
+                              </Label>
+                              <Input
+                                id={`memberRole-${index}`}
+                                placeholder="المطور، المدير، إلخ"
+                                value={member.role}
+                                onChange={(e) =>
+                                  updateTeamMember(member.id, "role", e.target.value)
+                                }
+                                  className="h-11 border-2 focus:border-primary/50 transition-all duration-300"
+                              />
+                            </div>
                           </div>
-                        </CardContent>
-                      </Card>
-                    ))}
+                          
+                          {teamMembers.length > 1 && (
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => removeTeamMember(member.id)}
+                                className="rounded-lg hover:bg-destructive/10 hover:text-destructive transition-colors"
+                            >
+                                <X size={18} />
+                            </Button>
+                          )}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
                   </div>
                 </motion.div>
               )}
@@ -639,8 +639,8 @@ export default function ProjectSupportForm() {
                         placeholder="مثال: مؤسس، مطور"
                         className="h-12 border-2 focus:border-primary/50 transition-all duration-300 bg-background/50 backdrop-blur-sm"
                       />
-                    </div>
-                  </div>
+                </div>
+              </div>
                 </motion.div>
               )}
               
@@ -921,24 +921,24 @@ export default function ProjectSupportForm() {
                   whileTap={{ scale: 0.98 }}
                   className="w-full md:w-2/3"
                 >
-                  <Button 
-                    type="submit" 
-                    size="lg"
-                    disabled={loading}
+                <Button 
+                  type="submit" 
+                  size="lg"
+                  disabled={loading}
                     className="w-full h-12 md:h-14 text-base md:text-lg font-bold bg-gradient-to-r from-amber-600 via-orange-600 to-red-600 bg-[length:200%_200%] animate-gradient hover:opacity-90 text-white shadow-lg shadow-amber-500/30 hover:shadow-xl hover:shadow-amber-500/40 transition-all duration-300"
-                  >
-                    {loading ? (
-                      <>
+                >
+                  {loading ? (
+                    <>
                         <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white ml-2" />
-                        جاري الإرسال...
-                      </>
-                    ) : (
-                      <>
-                        تقديم الطلب
+                      جاري الإرسال...
+                    </>
+                  ) : (
+                    <>
+                      تقديم الطلب
                         <ArrowRight size={18} className="ml-2" />
-                      </>
-                    )}
-                  </Button>
+                    </>
+                  )}
+                </Button>
                 </motion.div>
               </motion.div>
             </form>
@@ -958,28 +958,19 @@ export default function ProjectSupportForm() {
           </DialogHeader>
           <div className="space-y-4 text-sm">
             <p>
-              1. يجب أن يكون المشروع في مرحلة مبكرة (Idea, MVP, أو Scale).
+              1- A compensation in the form of shares or intellectual property rights may be requested.
             </p>
             <p>
-              2. يجب أن يكون لدى الفريق خبرة تقنية و Entrepreneurship.
+              2- All information provided will be kept strictly confidential.
             </p>
             <p>
-              3. سيتم تقييم الطلبات بناءً على الابتكار، التنفيذ، وال traction.
+              3- The company reserves the right to decline any request without providing a reason.
             </p>
             <p>
-              4. الدعم المالي يشمل تمويل حتى 300,000 جنيه مصري.
+              By submitting your project or idea through this form, you acknowledge that all information is provided voluntarily and at your own discretion. INGeneral is not responsible for any similarity between your submission and any existing, planned, or future projects developed by our team or our partners.
             </p>
             <p>
-              5. قد يتم طلب مقابل من الأسهم أو حقوق الملكية الفكرية.
-            </p>
-            <p>
-              6. سيتم الاحتفاظ بجميع المعلومات المقدمة بشكل سري.
-            </p>
-            <p>
-              7. يحق للشركة رفض أي طلب دون إبداء الأسباب.
-            </p>
-            <p>
-              8. يجب استخدام الأموال الممنوحة في تطوير المشروع فقط.
+              By submitting, you confirm that you understand this and that you waive any claim of ownership, copying, or idea appropriation.
             </p>
           </div>
         </DialogContent>

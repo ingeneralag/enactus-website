@@ -11,6 +11,12 @@ const Index = () => {
   const [registrations, setRegistrations] = useState<any[]>([]);
   const [groups, setGroups] = useState<any[]>([]);
   const [count, setCount] = useState(0);
+  const [timeRemaining, setTimeRemaining] = useState<{
+    days: number;
+    hours: number;
+    minutes: number;
+    seconds: number;
+  } | null>(null);
 
   useEffect(() => {
     // Load initial data
@@ -18,6 +24,7 @@ const Index = () => {
 
     // Subscribe to real-time updates
     const unsubscribe = subscribeToRegistrations(() => {
+      // Reload data when registration changes
       loadData();
     });
 
@@ -26,19 +33,91 @@ const Index = () => {
     };
   }, []);
 
+  // Also reload data periodically to ensure sync
+  useEffect(() => {
+    const interval = setInterval(() => {
+      loadData();
+    }, 30000); // Reload every 30 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Countdown timer to today 10 PM
+  useEffect(() => {
+    const calculateTimeRemaining = () => {
+      const now = new Date();
+      const today = new Date(now);
+      today.setHours(22, 0, 0, 0); // 10 PM = 22:00
+      
+      // If current time is past 10 PM today, set to tomorrow 10 PM
+      if (now.getTime() >= today.getTime()) {
+        today.setDate(today.getDate() + 1);
+        today.setHours(22, 0, 0, 0);
+      }
+
+      const difference = today.getTime() - now.getTime();
+
+      if (difference <= 0) {
+        setTimeRemaining(null);
+        return;
+      }
+
+      const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+      setTimeRemaining({ days, hours, minutes, seconds });
+    };
+
+    // Calculate immediately
+    calculateTimeRemaining();
+
+    // Update every second
+    const interval = setInterval(calculateTimeRemaining, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   const loadData = async () => {
     try {
-      const newCount = await getRegistrationCount();
-      setCount(newCount);
+      // Get all registrations
+      const allRegs = await getRegistrations() || [];
       
-      const groupsData = await getGroups();
-      setGroups(groupsData);
+      // Set count to ALL students (real + dummy) for display
+      setCount(allRegs.length);
       
-      const regsData = await getRegistrations();
+      // Filter out dummy students for public display (only for showing in list)
+      // Only exclude if is_dummy is explicitly true
+      // Include all others (false, null, undefined, missing field)
+      const realRegs = allRegs.filter((r: any) => {
+        // Only exclude if is_dummy is exactly true
+        return r.is_dummy !== true;
+      });
+      
       // عكس الترتيب في الصفحة الرئيسية: الأقدم أولاً
-      setRegistrations([...regsData].reverse());
+      setRegistrations([...realRegs].reverse());
+      
+      // Get groups and filter out dummy groups (groups with "🤖 Test" prefix)
+      const allGroupsData = await getGroups();
+      const realGroupsData = (allGroupsData || [])
+        .filter((g: any) => !g.name?.includes('🤖 Test'))
+        .map((group: any) => {
+          // Filter out dummy members from each group
+          const realMembers = (group.members || []).filter((m: any) => m.is_dummy !== true);
+          return {
+            ...group,
+            members: realMembers
+          };
+        })
+        .filter((group: any) => group.members.length > 0); // Only show groups with real members
+      
+      setGroups(realGroupsData);
     } catch (error) {
       console.error('Error loading data:', error);
+      // Set count to 0 on error to avoid showing wrong data
+      setCount(0);
+      setRegistrations([]);
     }
   };
 
@@ -261,14 +340,14 @@ const Index = () => {
               size="lg" 
                 className="text-base sm:text-lg md:text-xl px-8 py-6 md:px-10 md:py-7 bg-gradient-to-r from-primary via-secondary to-primary bg-[length:200%_200%] animate-gradient text-white font-bold shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 transition-all duration-300 w-full sm:w-auto"
               onClick={() => {
-                const element = document.getElementById('project-support');
+                const element = document.getElementById('v7-competition');
                 if (element) {
                   element.scrollIntoView({ behavior: 'smooth' });
                 }
               }}
             >
-                <DollarSign className="ml-2 h-5 w-5" />
-              قدم على دعم المشاريع
+                <Trophy className="ml-2 h-5 w-5" />
+              شارك في مسابقة التدريب
             </Button>
             </motion.div>
             <motion.div
@@ -280,14 +359,14 @@ const Index = () => {
               variant="outline" 
                 className="text-base sm:text-lg md:text-xl px-8 py-6 md:px-10 md:py-7 border-2 border-primary/50 bg-background/80 backdrop-blur-sm hover:bg-primary/10 hover:border-primary transition-all duration-300 font-bold w-full sm:w-auto shadow-md hover:shadow-lg"
               onClick={() => {
-                const element = document.getElementById('v7-competition');
+                const element = document.getElementById('project-support');
                 if (element) {
                   element.scrollIntoView({ behavior: 'smooth' });
                 }
               }}
             >
-                <Trophy className="ml-2 h-5 w-5" />
-              شارك في مسابقة التدريب
+                <DollarSign className="ml-2 h-5 w-5" />
+              قدم على دعم المشاريع
             </Button>
             </motion.div>
           </motion.div>
@@ -849,16 +928,80 @@ const Index = () => {
                   <span className="text-lg md:text-xl text-muted-foreground font-bold">طالب</span>
                 </motion.div>
                 
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.4, duration: 0.8 }}
-                  className="flex items-center justify-center gap-2 text-warning"
-                >
-                  <Clock className="h-5 w-5 md:h-6 md:w-6 animate-pulse" />
-                  <p className="text-base md:text-lg font-medium">في انتظار التقسيم للمجموعات...</p>
-                </motion.div>
+                {/* Countdown Timer - Only show when no groups exist */}
+                {groups.length === 0 && timeRemaining && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.4, duration: 0.8 }}
+                    className="flex flex-col items-center gap-4 mt-6"
+                  >
+                    <div className="flex items-center justify-center gap-2 text-warning mb-2">
+                      <Clock className="h-5 w-5 md:h-6 md:w-6 animate-pulse" />
+                      <p className="text-base md:text-lg font-medium">سيتم تقسيم المجموعات بعد هذا العداد</p>
+                </div>
+                    
+                    <div className="flex items-center gap-3 md:gap-4">
+                      {timeRemaining.days > 0 && (
+                        <motion.div
+                          animate={{ scale: [1, 1.05, 1] }}
+                          transition={{ duration: 1, repeat: Infinity }}
+                          className="flex flex-col items-center px-4 py-3 rounded-xl bg-primary/10 border-2 border-primary/30 min-w-[70px]"
+                        >
+                          <span className="text-2xl md:text-3xl font-black bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                            {timeRemaining.days}
+                          </span>
+                          <span className="text-xs md:text-sm text-muted-foreground font-bold">يوم</span>
+                        </motion.div>
+                      )}
+                      <motion.div
+                        animate={{ scale: [1, 1.05, 1] }}
+                        transition={{ duration: 1, repeat: Infinity, delay: 0.2 }}
+                        className="flex flex-col items-center px-4 py-3 rounded-xl bg-primary/10 border-2 border-primary/30 min-w-[70px]"
+                      >
+                        <span className="text-2xl md:text-3xl font-black bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                          {String(timeRemaining.hours).padStart(2, '0')}
+                        </span>
+                        <span className="text-xs md:text-sm text-muted-foreground font-bold">ساعة</span>
+                      </motion.div>
+                      <motion.div
+                        animate={{ scale: [1, 1.05, 1] }}
+                        transition={{ duration: 1, repeat: Infinity, delay: 0.4 }}
+                        className="flex flex-col items-center px-4 py-3 rounded-xl bg-primary/10 border-2 border-primary/30 min-w-[70px]"
+                      >
+                        <span className="text-2xl md:text-3xl font-black bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                          {String(timeRemaining.minutes).padStart(2, '0')}
+                        </span>
+                        <span className="text-xs md:text-sm text-muted-foreground font-bold">دقيقة</span>
+                      </motion.div>
+                      <motion.div
+                        animate={{ scale: [1, 1.05, 1] }}
+                        transition={{ duration: 1, repeat: Infinity, delay: 0.6 }}
+                        className="flex flex-col items-center px-4 py-3 rounded-xl bg-primary/10 border-2 border-primary/30 min-w-[70px]"
+                      >
+                        <span className="text-2xl md:text-3xl font-black bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                          {String(timeRemaining.seconds).padStart(2, '0')}
+                        </span>
+                        <span className="text-xs md:text-sm text-muted-foreground font-bold">ثانية</span>
+                      </motion.div>
+              </div>
+                  </motion.div>
+                )}
+                
+                {/* Show waiting message if no countdown (past deadline) and no groups */}
+                {groups.length === 0 && !timeRemaining && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.4, duration: 0.8 }}
+                    className="flex items-center justify-center gap-2 text-warning"
+                  >
+                    <Clock className="h-5 w-5 md:h-6 md:w-6 animate-pulse" />
+                    <p className="text-base md:text-lg font-medium">في انتظار التقسيم للمجموعات...</p>
+                  </motion.div>
+                )}
               </motion.div>
 
               {registrations.length > 0 && (

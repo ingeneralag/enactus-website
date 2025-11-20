@@ -19,12 +19,25 @@ export default function AllGroups() {
   const loadData = async () => {
     setLoading(true);
     try {
-      const [groupsData, regsData] = await Promise.all([
+      const [allGroupsData, regsData] = await Promise.all([
         getGroups(),
         getRegistrations()
       ]);
       
-      setGroups(groupsData);
+      // Filter out dummy groups (groups with "🤖 Test" prefix) for public display
+      const realGroupsData = (allGroupsData || []).filter((g: any) => !g.name?.includes('🤖 Test'));
+      
+      // Also filter out groups that only contain dummy students
+      const filteredGroups = realGroupsData.map((group: any) => {
+        // Filter out dummy members from each group
+        const realMembers = (group.members || []).filter((m: any) => m.is_dummy !== true);
+        return {
+          ...group,
+          members: realMembers
+        };
+      }).filter((group: any) => group.members.length > 0); // Only show groups with real members
+      
+      setGroups(filteredGroups);
       // عكس الترتيب: الأحدث أولاً
       setRegistrations([...regsData].reverse());
     } catch (error) {

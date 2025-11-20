@@ -95,7 +95,7 @@ export const getRegistrations = async () => {
   return data
 }
 
-// Get registration count
+// Get registration count (including all students - real + dummy)
 export const getRegistrationCount = async () => {
   const { count, error } = await supabase
     .from(TABLES.REGISTRATIONS)
@@ -388,6 +388,40 @@ export const deleteStudent = async (studentId: string) => {
   if (error) {
     console.error('Error deleting student:', error)
     throw new Error('Failed to delete student')
+  }
+}
+
+// Delete all students
+export const deleteAllStudents = async () => {
+  // First, reset all groups (unassign students)
+  const { error: updateError } = await supabase
+    .from(TABLES.REGISTRATIONS)
+    .update({ assigned: false, group_id: null })
+    .not('id', 'is', null)
+
+  if (updateError) {
+    console.error('Error resetting registrations:', updateError)
+  }
+
+  // Delete all groups
+  const { error: deleteGroupsError } = await supabase
+    .from(TABLES.GROUPS)
+    .delete()
+    .not('id', 'is', null)
+
+  if (deleteGroupsError) {
+    console.error('Error deleting groups:', deleteGroupsError)
+  }
+
+  // Delete all registrations
+  const { error: deleteError } = await supabase
+    .from(TABLES.REGISTRATIONS)
+    .delete()
+    .not('id', 'is', null)
+
+  if (deleteError) {
+    console.error('Error deleting all students:', deleteError)
+    throw new Error('Failed to delete all students')
   }
 }
 

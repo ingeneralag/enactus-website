@@ -29,7 +29,7 @@ import {
   FileText,
   Eye,
 } from 'lucide-react';
-import { getRegistrations, generateGroups, resetGroups, getGroups, reshuffleGroups, addRandomStudent, deleteStudent } from '../lib/api';
+import { getRegistrations, generateGroups, resetGroups, getGroups, reshuffleGroups, addRandomStudent, deleteStudent, deleteAllStudents } from '../lib/api';
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
@@ -40,6 +40,7 @@ export default function AdminDashboard() {
   const [generating, setGenerating] = useState(false);
   const [reshuffling, setReshuffling] = useState(false);
   const [addingRandom, setAddingRandom] = useState(false);
+  const [deletingAll, setDeletingAll] = useState(false);
 
   useEffect(() => {
     // Check authentication
@@ -204,6 +205,30 @@ export default function AdminDashboard() {
         variant: "destructive",
       });
       console.error(error);
+    }
+  };
+
+  const handleDeleteAllStudents = async () => {
+    // @ts-ignore
+    if (!confirm(`هل أنت متأكد من حذف جميع الطلاب (${registrations.length} طالب)؟\nسيتم حذف جميع الطلاب والمجموعات.\nلا يمكن التراجع عن هذا الإجراء!`)) return;
+
+    setDeletingAll(true);
+    try {
+      await deleteAllStudents();
+      toast({
+        title: "تم حذف جميع الطلاب بنجاح",
+        description: `تم حذف ${registrations.length} طالب وجميع المجموعات`,
+      });
+      await loadData();
+    } catch (error: any) {
+      toast({
+        title: "خطأ",
+        description: error.message || "فشل في حذف جميع الطلاب",
+        variant: "destructive",
+      });
+      console.error(error);
+    } finally {
+      setDeletingAll(false);
     }
   };
 
@@ -383,6 +408,20 @@ export default function AdminDashboard() {
                   <span>عرض المجموعات</span>
                   <ExternalLink size={14} />
                 </Button>
+                
+                <Button
+                  variant="destructive"
+                  onClick={() => handleDeleteAllStudents()}
+                  disabled={deletingAll || registrations.length === 0}
+                  className="flex items-center gap-2"
+                >
+                  {deletingAll ? (
+                    <Loader className="animate-spin" size={16} />
+                  ) : (
+                    <Trash2 size={16} />
+                  )}
+                  <span>{deletingAll ? 'جاري الحذف...' : 'حذف جميع الطلاب'}</span>
+                </Button>
               </div>
             </CardContent>
           </Card>
@@ -447,7 +486,16 @@ export default function AdminDashboard() {
                   <TableBody>
                     {registrations.map((registration: any) => (
                       <TableRow key={registration.id}>
-                        <TableCell className="font-medium">{registration.name}</TableCell>
+                        <TableCell className="font-medium">
+                          <div className="flex items-center gap-2">
+                            <span>{registration.name}</span>
+                            {registration.is_dummy && (
+                              <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-orange-100 text-orange-700 dark:bg-orange-900/50 dark:text-orange-300 border border-orange-300 dark:border-orange-700">
+                                وهمي
+                              </span>
+                            )}
+                          </div>
+                        </TableCell>
                         <TableCell>{registration.college || 'غير محدد'}</TableCell>
                         <TableCell className="font-mono">{registration.phone.replace('+2', '').replace(/(.{4})/g, '$1 ').trim()}</TableCell>
                         <TableCell>
